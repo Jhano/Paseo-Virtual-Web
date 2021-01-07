@@ -13,11 +13,19 @@ let modeloSchema = new Schema({
         type: String,
         required: [true, "El modelo 3D es necesario"]
     },
+    texture: {
+        type: String,
+        required: [true, "Las texturas son necesarios"]
+    },
+    shadow: {
+        type: String,
+        required: [true, "Las sombras son  necesarios"]
+    },
     usuarioId: {
         type: Schema.Types.ObjectId,
         ref: "Usuario",
     },
-    Description: {
+    description: {
         type: String,
         required: false
     },
@@ -33,9 +41,9 @@ let modeloSchema = new Schema({
         type: String,
         required: false
     },
-    position: {
+    location: {
         type: Object,
-        required: false
+        required: [true, "La localización es necesaria"]
     },
     state: {
         type: Boolean,

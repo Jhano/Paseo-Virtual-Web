@@ -3,7 +3,7 @@ require('dotenv').config(); //para usar las varibles de .env
 //==================
 //PUERTO
 //==================
-process.env.PORT = process.env.PORT;
+process.env.PORT = 4000;
 
 
 //==================
