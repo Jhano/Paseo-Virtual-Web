@@ -1,6 +1,5 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
-const { revalidarToken } = require("../controllers/auth");
 
 
 const {
@@ -8,8 +7,9 @@ const {
     obtenerModelos,
     obtenerModelo,
     updateModelo,
-    deleteModelo
-} = require('../controllers/Modelo');
+    deleteModelo,
+    searchModelo
+} = require('../controllers/modelo');
 const { validarCampos } = require("../middlewares/validar-campos");
 const { validarJWT } = require('../middlewares/validar-jwt');
 
@@ -21,9 +21,14 @@ router.get("/", validarJWT, obtenerModelos);
 
 router.get("/:id", validarJWT, obtenerModelo);
 
+router.get("/buscar/:termino", validarJWT, searchModelo);
+
 router.post(
     '/new', validarJWT, [
         check('name', 'El nombre es obligatorio').not().isEmpty(),
+        check('fileModel', 'El fileModel es obligatorio').not().isEmpty(),
+        check('texture', 'El texture es obligatorio').not().isEmpty(),
+        check('shadow', 'El shadow es obligatorio').not().isEmpty(),
         validarCampos
     ],
     crearModelo

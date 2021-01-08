@@ -1,5 +1,5 @@
 const { response } = require('express');
-const bcrypt = require('bcryptjs');
+
 const Modelo = require('../models/Modelo');
 
 
@@ -51,21 +51,24 @@ const obtenerModelos = async(req, res = response) => {
     let limite = req.query.limite || 0;
     limite = Number(limite);
 
-
-
     try {
-        const modelos = await Modelo.find({ state: true }, "name usuarioId description dateMonument extraInfo location state")
+        const modelos = await Modelo.find({ state: true })
             .sort('name')
             .populate('usuarioId', 'name email')
             .skip(desde)
             .limit(limite);
 
 
+
+        const objModelos = objModels(modelos);
+
         const totalModelos = await Modelo.countDocuments({ state: true });
+
+
 
         res.json({
             ok: true,
-            modelos,
+            modelos: objModelos,
             cuantos: totalModelos
         })
 
@@ -146,6 +149,32 @@ const deleteModelo = async(req, res = response) => {
 
 }
 
+const searchModelo = async(req, res = response) => {
+
+    let termino = req.params.termino;
+
+    let regex = new RegExp(termino, 'i');
+
+
+    try {
+        const modelos = await Modelo.find({ state: true, name: regex })
+            .populate('usuarioId', 'name email');
+
+        const objModelos = objModels(modelos);
+
+        res.json({
+            ok: true,
+            search: objModelos
+        })
+
+    } catch (err) {
+        error(res, err);
+    }
+
+
+
+}
+
 const error = (res, err) => {
     if (err) {
         return res.status(400).json({
@@ -155,10 +184,35 @@ const error = (res, err) => {
     }
 }
 
+const objModels = (modelos) => {
+
+    let obj = [];
+    modelos.forEach(modelo => obj.push({
+        id: modelo.id,
+        location: modelo.location,
+        model: {
+            obj: modelo.fileModel,
+            texture: modelo.texture,
+            shadow: modelo.shadow
+        },
+        data: {
+            name: modelo.name,
+            description: modelo.description,
+            extraInfo: modelo.extraInfo,
+            dateMonument: modelo.dateMonument
+        },
+        user: modelo.usuarioId
+    }))
+
+    return obj;
+
+}
+
 module.exports = {
     crearModelo,
     obtenerModelos,
     obtenerModelo,
     updateModelo,
-    deleteModelo
+    deleteModelo,
+    searchModelo
 }
