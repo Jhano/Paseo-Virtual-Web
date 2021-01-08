@@ -19,6 +19,8 @@ app.use(bodyParser.json());
 
 //rutas
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/usuarios', require('./routes/usuario'));
+app.use('/api/modelos', require('./routes/modelo'));
 
 app.listen(process.env.PORT, () => {
     console.log(`Servidor corriendo en puerto ${process.env.PORT}`);

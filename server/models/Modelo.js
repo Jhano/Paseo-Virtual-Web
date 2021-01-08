@@ -43,7 +43,7 @@ let modeloSchema = new Schema({
     },
     location: {
         type: Object,
-        required: [true, "La localización es necesaria"]
+        required: false
     },
     state: {
         type: Boolean,
