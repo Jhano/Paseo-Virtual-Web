@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const validarJWT = (req, res = response, next) => {
 
-    // x-token headers
+    // token headers
     const token = req.get('token');
 
     if (!token) {
@@ -15,13 +15,14 @@ const validarJWT = (req, res = response, next) => {
     }
 
     try {
-        const { uid, name } = jwt.verify(
+        const { uid, name, img } = jwt.verify(
             token,
             process.env.SEED
         );
 
         req.uid = uid;
         req.name = name;
+        req.img = img;
     } catch (error) {
         return res.status(401).json({
             ok: false,

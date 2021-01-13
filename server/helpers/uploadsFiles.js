@@ -80,7 +80,7 @@ const fileModelo = async(id, res, nombreArchivo) => {
 }
 
 const deleteFile = (nombreImagen, tipo) => {
-    let pathImage = path.resolve(__dirname, `../../uploads/${tipo}/${nombreImagen}`) //creando un path
+    let pathImage = path.resolve(__dirname, `../../public/uploads/${tipo}/${nombreImagen}`) //creando un path
     if (fs.existsSync(pathImage)) {
         fs.unlinkSync(pathImage);
     }

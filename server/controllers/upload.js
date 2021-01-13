@@ -43,7 +43,7 @@ const uploadFile = async(req, res = response) => {
         let nombreArchivo = `${id}-${new Date().getMilliseconds()}.${extension}`;
 
 
-        await archivo.mv(`uploads/${tipo}/${nombreArchivo}`);
+        await archivo.mv(`public/uploads/${tipo}/${nombreArchivo}`);
 
 
         switch (tipo) {

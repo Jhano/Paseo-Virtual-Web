@@ -29,13 +29,14 @@ const loginUsuario = async(req, res = response) => {
             })
         }
 
-        const token = await generarJWT(usuario.id, usuario.name);
+        const token = await generarJWT(usuario.id, usuario.name, usuario.img);
 
 
         res.json({
             ok: true,
             uid: usuario.id,
             name: usuario.name,
+            img: usuario.img,
             token
         })
 
@@ -51,15 +52,27 @@ const loginUsuario = async(req, res = response) => {
 
 const revalidarToken = async(req, res = response) => {
 
-    const { uid, name } = req;
+    const { uid, name, img } = req;
 
     // Generar JWT
-    const token = await generarJWT(uid, name);
+    try {
+        const token = await generarJWT(uid, name, img);
 
-    res.json({
-        ok: true,
-        token
-    })
+        res.json({
+            ok: true,
+            uid,
+            name,
+            img,
+            token
+        })
+
+    } catch (err) {
+        res.status(500).json({
+            ok: false,
+            msg: err
+        });
+    }
+
 }
 
 
