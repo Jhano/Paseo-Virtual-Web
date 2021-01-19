@@ -12,6 +12,7 @@ const {
 } = require('../controllers/usuario');
 const { validarCampos } = require("../middlewares/validar-campos");
 const { validarJWT } = require('../middlewares/validar-jwt');
+const { validarRole } = require("../middlewares/validar-role");
 
 
 
@@ -35,7 +36,7 @@ router.post(
 
 router.put('/:id', validarJWT, updateUsuario);
 
-router.delete('/:id', validarJWT, deleteUsuario);
+router.delete('/:id', [validarJWT, validarRole], deleteUsuario);
 
 
 module.exports = router;

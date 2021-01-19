@@ -42,9 +42,20 @@ const fileUsuario = async(id, res, nombreArchivo) => {
     }
 }
 
-const fileModelo = async(id, res, nombreArchivo) => {
+const fileModelo = async(id, req, res, nombreArchivo) => {
+
+    let role = req.role;
 
     try {
+        if (role === 'USER_ROLE') {
+            return res.status(500).json({
+                ok: false,
+                err: {
+                    message: 'No tienes permisos para agregar un Modelo'
+                }
+            })
+        }
+
         const modelo = await Modelo.findById(id);
 
         if (!modelo) {

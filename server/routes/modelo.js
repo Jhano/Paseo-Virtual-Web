@@ -12,19 +12,20 @@ const {
 } = require('../controllers/modelo');
 const { validarCampos } = require("../middlewares/validar-campos");
 const { validarJWT } = require('../middlewares/validar-jwt');
+const { validarRole } = require("../middlewares/validar-role");
 
 
 
 const router = Router();
 
-router.get("/", validarJWT, obtenerModelos);
+router.get("/", validarJWT, validarRole, obtenerModelos);
 
 router.get("/:id", validarJWT, obtenerModelo);
 
 router.get("/buscar/:termino", validarJWT, searchModelo);
 
 router.post(
-    '/new', validarJWT, [
+    '/new', validarJWT, validarRole, [
         check('name', 'El nombre es obligatorio').not().isEmpty(),
         check('fileModel', 'El fileModel es obligatorio').not().isEmpty(),
         check('texture', 'El texture es obligatorio').not().isEmpty(),
@@ -36,9 +37,9 @@ router.post(
 );
 
 
-router.put('/:id', validarJWT, updateModelo);
+router.put('/:id', [validarJWT, validarRole], updateModelo);
 
-router.delete('/:id', validarJWT, deleteModelo);
+router.delete('/:id', [validarJWT, validarRole], deleteModelo);
 
 
 module.exports = router;

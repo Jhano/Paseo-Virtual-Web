@@ -101,17 +101,25 @@ const obtenerUsuario = async(req, res = response) => {
 
 const updateUsuario = async(req, res = response) => {
 
-    const { password, email } = req.body;
+    const { password, email, role } = req.body;
     let body = req.body;
     let id = req.params.id;
-
-    if (password !== undefined) {
-        //encriptar contraseña
-        const salt = bcrypt.genSaltSync();
-        body.password = bcrypt.hashSync(password, salt);
-    }
+    let roleUsuario = req.role;
 
     try {
+        if (roleUsuario === 'USER_ROLE' && role !== undefined) {
+            return res.status(500).json({
+                ok: false,
+                msg: 'No tienes permisos de administrador para cambiar el Role'
+            });
+        }
+
+        if (password !== undefined) {
+            //encriptar contraseña
+            const salt = bcrypt.genSaltSync();
+            body.password = bcrypt.hashSync(password, salt);
+        }
+
         if (email !== undefined) {
             const usuario = await Usuario.findOne({ email });
             if (usuario) {

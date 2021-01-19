@@ -48,7 +48,7 @@ const uploadFile = async(req, res = response) => {
 
         switch (tipo) {
             case 'modelo':
-                fileModelo(id, res, nombreArchivo);
+                fileModelo(id, req, res, nombreArchivo);
                 break;
 
             case 'usuario':
