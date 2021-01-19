@@ -54,7 +54,7 @@ export const LoginScreen = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const {msgError, validatedError} = useSelector(state =>  state.ui);
+  const {msgError, validatedError, loading} = useSelector(state =>  state.ui);
 
   const [formValues, handleInputChange] = useForm({
     email: '',
@@ -115,6 +115,7 @@ export const LoginScreen = () => {
               autoFocus
               onChange={handleInputChange}
               helperText={msgError?.includes('Email') && msgError}
+             
             />
             <TextField
               error={msgError?.includes('Password') ? validatedError : false}
@@ -129,6 +130,7 @@ export const LoginScreen = () => {
               value={password}
               onChange={handleInputChange}
               helperText={msgError?.includes('Password') && msgError}
+              autoComplete="off"
             />
             <Button
               type="submit"
@@ -136,6 +138,7 @@ export const LoginScreen = () => {
               variant="contained"
               color="primary"
               className={classes.submit}
+              disabled={loading}
             >
               Login
             </Button>

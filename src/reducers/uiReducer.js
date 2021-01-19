@@ -3,7 +3,8 @@ import { types } from "../types/types";
 const initialState = {
     validatedError: false,
     openDrawer: true,
-    msgError: ''
+    msgError: '',
+    loading: false,
 }
 
 export const uiReducer = (state = initialState, action) => {
@@ -34,6 +35,19 @@ export const uiReducer = (state = initialState, action) => {
                 ...state,
                 openDrawer: false
             }
+
+        case types.uiStartLoading:
+            return {
+                ...state,
+                loading: true
+            }
+
+        case types.uiFinishLoading:
+            return {
+                ...state,
+                loading: false
+            }
+
 
         default:
             return state;

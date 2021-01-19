@@ -1,6 +1,9 @@
 import Swal from 'sweetalert2';
 import { fetchConToken, fetchSinToken } from '../helpers/fetch';
 import { types } from '../types/types';
+import { finishLoading, startLoading } from './ui';
+import { userClean } from './user';
+
 
 
 
@@ -9,6 +12,7 @@ export const startLogin = (email, password) => {
 
     return async(dispatch) => {
 
+        dispatch(startLoading());
 
         const resp = await fetchSinToken('auth', { email, password }, 'POST');
         const data = await resp.json();
@@ -23,8 +27,10 @@ export const startLogin = (email, password) => {
                 name: data.name,
                 img: data.img
             }))
+            dispatch(finishLoading());
         } else {
             Swal.fire('Error', data.msg, 'error');
+            dispatch(finishLoading());
         }
 
 
@@ -69,6 +75,7 @@ export const startLogout = () => {
     return (dispatch) => {
 
         localStorage.clear();
+        dispatch(userClean())
         dispatch(logout());
     }
 }

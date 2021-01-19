@@ -71,7 +71,7 @@ const Navbar = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const {openDrawer: open} = useSelector(state => state.ui);
-    const {img} = useSelector(state => state.auth);
+    const {img} = useSelector(state => state.user);
 
     const handleDrawerOpen = () => {
         dispatch(openDrawer());
@@ -103,7 +103,7 @@ const Navbar = () => {
                         </IconButton>
                     </div>
                     <div  style={{display: 'flex'}}>
-                      <Link to="user" style={{ textDecoration: 'none' }}>
+                      <Link to="/user" style={{ textDecoration: 'none' }}>
                         {
                           img 
                               ? <Avatar alt="imagen usuario" src={`../../uploads/usuario/${img}`} className={classes.sizeMedium}/>

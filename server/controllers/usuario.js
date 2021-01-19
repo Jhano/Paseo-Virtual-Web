@@ -2,6 +2,7 @@ const { response } = require('express');
 const bcrypt = require('bcryptjs');
 const Usuario = require('../models/Usuario');
 const { generarJWT } = require('../helpers/jwt');
+const { default: validator } = require('validator');
 
 
 const crearUsuario = async(req, res = response) => {
@@ -100,10 +101,27 @@ const obtenerUsuario = async(req, res = response) => {
 
 const updateUsuario = async(req, res = response) => {
 
+    const { password, email } = req.body;
     let body = req.body;
     let id = req.params.id;
 
+    if (password !== undefined) {
+        //encriptar contraseña
+        const salt = bcrypt.genSaltSync();
+        body.password = bcrypt.hashSync(password, salt);
+    }
+
     try {
+        if (email !== undefined) {
+            const usuario = await Usuario.findOne({ email });
+            if (usuario) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'Ya existe un usuario con ese email'
+                });
+            }
+        }
+
         const usuario = await Usuario.findByIdAndUpdate(id, body, { new: true, runValidators: true });
 
         res.json({

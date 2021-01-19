@@ -41,3 +41,19 @@ export const fetchConToken = (endpoint, data, method = 'GET') => {
         });
     }
 }
+
+
+export const fetchUpload = (endpoint, data, method = 'POST') => {
+
+    const url = `${baseUrl}/${endpoint}`;
+    const token = localStorage.getItem('token') || '';
+
+    return fetch(url, {
+        method,
+        headers: {
+            'token': token
+        },
+        body: data
+    });
+
+}

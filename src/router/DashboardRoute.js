@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { 
     Switch, 
     Route,  
@@ -16,15 +16,17 @@ import Navbar from '../components/ui/Navbar';
 import SideBar from '../components/ui/SideBar';
 import UserScreen from '../components/user/UserScreen';
 import { Container, CssBaseline, Grid } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
+import { startGetUser } from '../actions/user';
 
 const useStyles = makeStyles((theme) => ({
     root: {
       display: 'flex',
     },
+    appBarSpacer: theme.mixins.toolbar,
     content: {
-        flexGrow: 3,
+        flexGrow: 1,
         height: '100vh',
-        marginTop: theme.spacing(5),
         overflow: 'auto',
       },
     container: {
@@ -35,6 +37,15 @@ const useStyles = makeStyles((theme) => ({
 
 const DashboardRoute = () => {
     const classes = useStyles();
+    const dispatch = useDispatch();
+    const {uid} = useSelector(state => state.auth);
+    const {img} = useSelector(state => state.user);
+
+    
+
+    useEffect(() => {
+        dispatch(startGetUser(uid));
+    }, [dispatch, uid, img]);
 
     return (
         <div className={classes.root}>
@@ -42,8 +53,8 @@ const DashboardRoute = () => {
                 <Navbar/>
                 <SideBar/>
                 <main className={classes.content}>  
-                    <div>
-                        <Container maxWidth="lg" className={classes.container}>
+                    <div  className={classes.appBarSpacer}/>
+                        <Container maxWidth="xl" className={classes.container}>
                             <Grid container spacing={3}>
                                 <Switch>
                                     <Route exact path='/' component={VirtualScreen}/>
@@ -55,7 +66,6 @@ const DashboardRoute = () => {
                                 </Switch>
                             </Grid> 
                         </Container>
-                    </div>
                 </main>
         </div>
     );

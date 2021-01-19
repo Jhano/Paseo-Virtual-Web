@@ -13,4 +13,13 @@ export const types = {
     uiFinishLoading: '[ui] Finish loading',
     uiSetOpenDrawer: '[ui] Set open drawer',
     uiSetCloseDrawer: '[ui] Set close drawer',
+
+    userStartGet: '[user] Start get usuario',
+    userGet: '[user] Get usuarios',
+    userStartUpdate: '[user] Start update usuario',
+    userUpdate: '[user] Update usuario',
+    userStartUploadFile: '[user] Start upload file',
+    userUploadFile: '[user] Upload file',
+    userClean: '[user] Clean reducer',
+
 }
