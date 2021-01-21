@@ -14,3 +14,30 @@ export const closeDrawer = () => ({ type: types.uiSetCloseDrawer });
 export const startLoading = () => ({ type: types.uiStartLoading })
 
 export const finishLoading = () => ({ type: types.uiFinishLoading })
+
+export const setShowPassword = (value) => ({ type: types.uiShowPassword, payload: value })
+
+export const changePage = (newPage) => ({
+    type: types.uiSetChangePage,
+    payload: newPage
+})
+
+export const changeRowsPerPage = (rowsPerPage) => ({
+    type: types.uiSetRowsPerPage,
+    payload: rowsPerPage
+})
+
+export const changeDesde = (desde) => ({
+    type: types.uiSetChangeDesde,
+    payload: desde
+})
+
+export const changeRowsPerPageSearch = (rowsPerPageSearch) => ({
+    type: types.uiSetChangeRowsPerPageSearch,
+    payload: rowsPerPageSearch
+})
+
+export const changeDesdeSearch = (desdeSearch) => ({
+    type: types.uiSetChangeDesdeSearch,
+    payload: desdeSearch
+})

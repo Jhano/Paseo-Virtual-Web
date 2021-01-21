@@ -23,6 +23,7 @@ app.use('/api/usuarios', require('./routes/usuario'));
 app.use('/api/modelos', require('./routes/modelo'));
 app.use('/api/historial', require('./routes/historial'));
 app.use('/api/uploads', require('./routes/upload'));
+app.use('/api/emails', require('./routes/email'));
 
 
 app.listen(process.env.PORT, () => {

@@ -51,6 +51,7 @@ const obtenerModelos = async(req, res = response) => {
     let limite = req.query.limite || 0;
     limite = Number(limite);
 
+
     try {
         const modelos = await Modelo.find({ state: true })
             .sort('name')
@@ -155,16 +156,33 @@ const searchModelo = async(req, res = response) => {
 
     let regex = new RegExp(termino, 'i');
 
+    let desde = req.query.desde || 0;
+    desde = Number(desde);
+
+    let limite = req.query.limite || 0;
+    limite = Number(limite);
+
 
     try {
+        const modelosTotal = await Modelo.find({ state: true, name: regex });
+        const cuantos = modelosTotal.length;
+
+
         const modelos = await Modelo.find({ state: true, name: regex })
-            .populate('usuarioId', 'name email');
+            .populate('usuarioId', 'name email')
+            .skip(desde)
+            .limit(limite);
 
         const objModelos = objModels(modelos);
 
+
+
+
+
         res.json({
             ok: true,
-            search: objModelos
+            modelos: objModelos,
+            cuantos
         })
 
     } catch (err) {

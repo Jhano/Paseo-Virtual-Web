@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const Usuario = require('../models/Usuario');
 const { generarJWT } = require('../helpers/jwt');
 const { default: validator } = require('validator');
+const sendEmail = require('../helpers/sendEmail');
 
 
 const crearUsuario = async(req, res = response) => {
@@ -26,17 +27,39 @@ const crearUsuario = async(req, res = response) => {
         const salt = bcrypt.genSaltSync();
         usuario.password = bcrypt.hashSync(password, salt);
 
-        await usuario.save();
+        if (usuario.role === 'USER_ROLE') {
+            usuario.state = false;
 
-        const token = await generarJWT(usuario.id, usuario.name);
+            const tokenUser = await generarJWT(usuario.id, usuario.name, usuario.role);
 
-        res.status(201).json({
-            ok: true,
-            uid: usuario.id,
-            name: usuario.name,
-            token
+            const enviadoCorrectamente = await sendEmail(usuario.email, tokenUser, res);
 
-        })
+            if (enviadoCorrectamente) {
+                await usuario.save();
+                res.status(201).json({
+                    ok: true,
+                    uid: usuario.id,
+                    name: usuario.name,
+                    message: 'Se le ha enviado un correo de confirmación a su email para su correcto registro',
+                    token: tokenUser
+                })
+            }
+
+        } else {
+            await usuario.save();
+            const tokenAdmin = await generarJWT(usuario.id, usuario.name, usuario.role);
+            res.status(201).json({
+                ok: true,
+                uid: usuario.id,
+                name: usuario.name,
+                token: tokenAdmin
+            })
+        }
+
+
+
+
+
 
     } catch (err) {
         console.log(err);

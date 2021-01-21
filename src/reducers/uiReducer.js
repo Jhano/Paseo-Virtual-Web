@@ -5,6 +5,12 @@ const initialState = {
     openDrawer: true,
     msgError: '',
     loading: false,
+    page: 0,
+    rowsPerPage: 5,
+    desde: 0,
+    desdeSearch: 0,
+    rowsPerPageSearch: 5,
+    showPassword: false
 }
 
 export const uiReducer = (state = initialState, action) => {
@@ -46,6 +52,36 @@ export const uiReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false
+            }
+        case types.uiSetChangePage:
+            return {
+                ...state,
+                page: action.payload
+            }
+        case types.uiSetRowsPerPage:
+            return {
+                ...state,
+                rowsPerPage: action.payload
+            }
+        case types.uiSetChangeDesde:
+            return {
+                ...state,
+                desde: action.payload
+            }
+        case types.uiShowPassword:
+            return {
+                ...state,
+                showPassword: action.payload
+            }
+        case types.uiSetChangeDesdeSearch:
+            return {
+                ...state,
+                desdeSearch: action.payload
+            }
+        case types.uiSetChangeRowsPerPageSearch:
+            return {
+                ...state,
+                rowsPerPageSearch: action.payload
             }
 
 

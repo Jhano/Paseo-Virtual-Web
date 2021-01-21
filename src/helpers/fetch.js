@@ -30,6 +30,13 @@ export const fetchConToken = (endpoint, data, method = 'GET') => {
                 'token': token
             }
         })
+    } else if (method === 'DELETE') {
+        return fetch(url, {
+            method,
+            headers: {
+                'token': token
+            }
+        })
     } else {
         return fetch(url, {
             method,

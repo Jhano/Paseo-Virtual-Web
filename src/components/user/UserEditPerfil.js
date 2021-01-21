@@ -1,16 +1,17 @@
 import React from 'react';
 import  Button from '@material-ui/core/Button';
-import VisibilityIcon from '@material-ui/icons/Visibility';
+import Visibility from '@material-ui/icons/Visibility';
 import EmailIcon from '@material-ui/icons/Email';
-import { InputAdornment, TextField } from '@material-ui/core';
+import { IconButton, InputAdornment, TextField } from '@material-ui/core';
 import { AccountCircle } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from '../hooks/useForm';
 import validator from 'validator';
-import { removeError, setError } from '../../actions/ui';
+import { removeError, setError, setShowPassword } from '../../actions/ui';
 import Typography from '@material-ui/core/Typography';
 import { startUpdateUser } from '../../actions/user';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -58,7 +59,7 @@ const UserEditPerfil = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const {msgError, validatedError, loading} = useSelector(state =>  state.ui);
+    const {msgError, validatedError, loading, showPassword} = useSelector(state =>  state.ui);
 
     const [formValues, handleInputChange, reset] = useForm({
       name: '',
@@ -85,6 +86,10 @@ const UserEditPerfil = () => {
         })
       }
       
+  }
+
+  const handleClickShowPassword = () => {
+    dispatch(setShowPassword(!showPassword));
   }
 
 
@@ -130,8 +135,8 @@ const UserEditPerfil = () => {
                 Editar Perfil
               </Typography>
               </div>
-
-             <TextField
+          <form  onSubmit={handleUpdate}>
+          <TextField
                   error={msgError?.includes('Name') ? validatedError : false}
                   id="nombre-input"
                   name="name"
@@ -163,6 +168,7 @@ const UserEditPerfil = () => {
                   helperText={msgError?.includes('Email') && msgError}
                   InputProps={{
                     startAdornment: (
+                      
                       <InputAdornment position="start">
                         <EmailIcon />
                       </InputAdornment>
@@ -174,7 +180,7 @@ const UserEditPerfil = () => {
                   id="password-input"
                   name="password"
                   label="Password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder={`Enter password...`}
                   value={password}
                   onChange={handleInputChange}
@@ -184,7 +190,13 @@ const UserEditPerfil = () => {
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
-                          <VisibilityIcon />
+                        <IconButton
+                          edge="start"
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                        >
+                          { showPassword ? <Visibility/> : <VisibilityOff /> }
+                        </IconButton>
                       </InputAdornment>
                     ),
                   }}
@@ -195,7 +207,7 @@ const UserEditPerfil = () => {
                   id="password2-input"
                   name="password2"
                   label="Repeat Password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder={`Enter password...`}
                   value={password2}
                   onChange={handleInputChange}
@@ -205,22 +217,29 @@ const UserEditPerfil = () => {
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
-                          <VisibilityIcon />
+                        <IconButton
+                          edge="start"
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                        >
+                          { showPassword ? <Visibility/> : <VisibilityOff /> }
+                        </IconButton>
                       </InputAdornment>
                     ),
                   }}      
                 />
                 
                     <Button
-                        type="button"
+                        type="submit"
                         variant="contained"
                         color="primary"
                         className={classes.submit}
-                        onClick={handleUpdate}
                         disabled={loading}
                         >
                         Guardar Perfil
                     </Button>
+          </form>
+            
                 
                     
         </div>
