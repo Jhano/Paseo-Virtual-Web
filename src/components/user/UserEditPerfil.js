@@ -6,7 +6,7 @@ import { IconButton, InputAdornment, TextField } from '@material-ui/core';
 import { AccountCircle } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { useForm } from '../hooks/useForm';
+import { useForm } from '../../hooks/useForm';
 import validator from 'validator';
 import { removeError, setError, setShowPassword } from '../../actions/ui';
 import Typography from '@material-ui/core/Typography';

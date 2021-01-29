@@ -13,9 +13,10 @@ import UpdateIcon from '@material-ui/icons/Update';
 import MoreIcon from '@material-ui/icons/More';
 import { Button, TableHead } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { changePage, changeRowsPerPage, changeDesde, changeDesdeSearch, changeRowsPerPageSearch } from '../../actions/ui';
+import { changePage, changeRowsPerPage, changeDesde, changeDesdeSearch, changeRowsPerPageSearch, openModal } from '../../actions/ui';
 import TablePaginationAction from '../ui/TablePaginationAction';
 import { startDeleteModel } from '../../actions/model';
+import { Link } from 'react-router-dom';
 
 
 const StyledTableCell = withStyles((theme) => ({
@@ -46,7 +47,7 @@ const TableModels = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const {page, rowsPerPage, rowsPerPageSearch, desdeSearch } = useSelector(state => state.ui);
+    const {page, rowsPerPage, rowsPerPageSearch } = useSelector(state => state.ui);
     const {models, cuantos, search } = useSelector(state => state.model);
 
     const handleChangePage = (newPage, desde) => {
@@ -55,9 +56,7 @@ const TableModels = () => {
           dispatch(changeDesdeSearch(desde));
         }else{
           dispatch(changeDesde(desde));
-        }
-        
-        
+        }    
     };
     
     const handleChangeRowsPerPage = (event) => {
@@ -74,6 +73,11 @@ const TableModels = () => {
     const handelDeleteModel = (id) => {
         dispatch(startDeleteModel(id))
     }
+
+    const handleModal = () => {
+      dispatch(openModal())
+    }
+ 
 
      return (
     <TableContainer component={Paper}>
@@ -105,20 +109,23 @@ const TableModels = () => {
                     >
                         <DeleteIcon />
                     </Button>
-                       
-                    <Button
-                        variant="contained" 
-                        style={{backgroundColor: 'blue', color: 'white', marginRight:'5px' }}
-                        type="button"  
-                    >
-                        <UpdateIcon />
-                    </Button>
-                       
-                   
+
+                    <Link to={`/model/update/${model.id}`} style={{textDecoration: 'none'}}>
+                      <Button
+                          variant="contained" 
+                          style={{backgroundColor: 'blue', color: 'white', marginRight:'5px' }}
+                      
+                          type="button"  
+                      >
+                          <UpdateIcon />
+                      </Button>
+                    </Link>  
+                             
                     <Button
                         variant="contained" 
                         color="default"
-                        type="button"   
+                        type="button"  
+                        onClick={handleModal}  
                     >
                         <MoreIcon />
                     </Button>

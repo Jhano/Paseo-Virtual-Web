@@ -4,7 +4,10 @@ const initialState = {
     models: [],
     cuantos: 0,
     search: false,
-    showMore: false
+    showMore: false,
+    file: null,
+    modelUpdate: {},
+    modelFind: {}
 }
 
 export const modelReducer = (state = initialState, action) => {
@@ -33,6 +36,31 @@ export const modelReducer = (state = initialState, action) => {
             return {
                 ...state,
                 models: state.models.filter(model => model.id !== action.payload._id),
+            }
+
+        case types.modelAdd:
+            return {
+                ...state,
+                models: [
+                    action.payload,
+                    ...state.models
+                ],
+            }
+        case types.modelUpdate:
+            return {
+                ...state,
+                modelUpdate: action.payload,
+            }
+        case types.modelUploadFile:
+            return {
+                ...state,
+                modelUpdate: action.payload.model,
+                file: action.payload.file
+            }
+        case types.modelFindById:
+            return {
+                ...state,
+                modelFind: action.payload
             }
 
         default:

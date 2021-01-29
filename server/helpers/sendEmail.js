@@ -1,11 +1,12 @@
 const nodemailer = require('nodemailer');
 
 // email sender function
-const sendEmail = async ( email, token, res) => {
+const sendEmail = async(email, token, res) => {
 
 
-    try{
-        
+
+    try {
+
         // Definimos el transporter
         const transporter = nodemailer.createTransport({
             service: 'Gmail',
@@ -25,10 +26,10 @@ const sendEmail = async ( email, token, res) => {
         // Enviamos el email
         const correoEnviado = await transporter.sendMail(mailOptions);
 
-        if(correoEnviado){
+        if (correoEnviado) {
             console.log("HOLAA");
             return true;
-        }else{
+        } else {
             res.status(500).json({
                 ok: false,
                 err,
@@ -36,9 +37,9 @@ const sendEmail = async ( email, token, res) => {
             })
         }
 
-        
 
-    }catch(err){
+
+    } catch (err) {
         res.status(400).json({
             ok: false,
             err,

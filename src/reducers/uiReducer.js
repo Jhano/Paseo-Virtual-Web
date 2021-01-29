@@ -10,7 +10,10 @@ const initialState = {
     desde: 0,
     desdeSearch: 0,
     rowsPerPageSearch: 5,
-    showPassword: false
+    showPassword: false,
+    activeModal: false,
+    selectedFile: ''
+
 }
 
 export const uiReducer = (state = initialState, action) => {
@@ -82,6 +85,21 @@ export const uiReducer = (state = initialState, action) => {
             return {
                 ...state,
                 rowsPerPageSearch: action.payload
+            }
+        case types.uiOpenModal:
+            return {
+                ...state,
+                activeModal: true
+            }
+        case types.uiCloseModal:
+            return {
+                ...state,
+                activeModal: false
+            }
+        case types.uiSelectedFile:
+            return {
+                ...state,
+                selectedFile: action.payload
             }
 
 

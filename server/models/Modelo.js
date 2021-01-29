@@ -41,9 +41,17 @@ let modeloSchema = new Schema({
         type: String,
         required: false
     },
-    location: {
-        type: Object,
-        required: false
+    lat: {
+        type: Number,
+        default: 0
+    },
+    long: {
+        type: Number,
+        default: 0
+    },
+    ejeZ: {
+        type: Number,
+        default: 0
     },
     state: {
         type: Boolean,

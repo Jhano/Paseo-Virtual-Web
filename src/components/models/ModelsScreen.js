@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TableModels from './TableModels';
 import { Button, InputAdornment, TextField } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import SearchIcon from '@material-ui/icons/Search';
+import ClearIcon from '@material-ui/icons/Clear';
+
 import { searchModelsOff, startLoadingModels, startSearchModels } from '../../actions/model';
 import { changeRowsPerPage, changeDesde, changeDesdeSearch, changeRowsPerPageSearch } from '../../actions/ui';
-import { useForm } from '../hooks/useForm';
-import ClearIcon from '@material-ui/icons/Clear';
+import { useForm } from '../../hooks/useForm';
+import ModalShowMore from './ModalShowMore';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -90,6 +95,8 @@ const ModelsScreen = () => {
 
 
 
+
+
     return (
         <div className={classes.root}>
             <div className={classes.title}>
@@ -130,17 +137,20 @@ const ModelsScreen = () => {
                 </form>
                 
                 <div className={classes.button}>
-                    <Button 
-                        variant="contained" 
-                        style={{backgroundColor: 'green', color: 'white'}}
-                        type="button"  
-                        startIcon={<AddCircleIcon />}    
-                    >
-                        New Models
-                    </Button>
+                    <Link to="/model/add" style={{textDecoration: 'none'}}>
+                        <Button 
+                            variant="contained" 
+                            style={{backgroundColor: 'green', color: 'white'}}
+                            type="button"  
+                            startIcon={<AddCircleIcon />}   
+                            
+                        >
+                            New Models
+                        </Button>
+                    </Link>  
                 </div> 
             </div>
-            
+            <ModalShowMore/>       
             <TableModels />
         </div>
     );

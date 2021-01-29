@@ -108,9 +108,19 @@ const updateModelo = async(req, res = response) => {
 
     let body = req.body;
     let id = req.params.id;
+    let { name } = body;
 
     try {
-        const modelo = await Modelo.findByIdAndUpdate(id, body, { new: true, runValidators: true })
+        let modelo = await Modelo.findOne({ name });
+
+        if (modelo) {
+            return res.status(400).json({
+                ok: false,
+                err: 'El modelo ya existe'
+            });
+        }
+
+        modelo = await Modelo.findByIdAndUpdate(id, body, { new: true, runValidators: true })
             .populate('usuarioId', 'name email');
 
         res.json({
@@ -207,7 +217,11 @@ const objModels = (modelos) => {
     let obj = [];
     modelos.forEach(modelo => obj.push({
         id: modelo.id,
-        location: modelo.location,
+        location: {
+            lat: modelo.lat,
+            long: modelo.long,
+            ejeZ: modelo.ejeZ,
+        },
         model: {
             obj: modelo.fileModel,
             texture: modelo.texture,

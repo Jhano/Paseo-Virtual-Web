@@ -19,6 +19,9 @@ export const types = {
     uiSetChangeDesdeSearch: '[ui] Set change desde search',
     uiSetChangeRowsPerPageSearch: '[ui] Set change rows per page search',
     uiShowPassword: '[ui] Show password',
+    uiOpenModal: '[ui] Open modal',
+    uiCloseModal: '[ui] Close modal',
+    uiSelectedFile: '[ui] Selected file',
 
     userStartGet: '[user] Start get usuario',
     userGet: '[user] Get usuarios',
@@ -30,6 +33,10 @@ export const types = {
 
     modelStartLoading: '[model] Start loading',
     modelLoading: '[model] Loading',
+    modelStartFindById: '[model] Start find by id',
+    modelFindById: '[model] Find by id',
+    modelStartAdd: '[model] Start add',
+    modelAdd: '[model] Add',
     modelStartUpdate: '[model] Start update',
     modelUpdate: '[model] Update',
     modelStartDelete: '[model] Start delete',
@@ -37,4 +44,6 @@ export const types = {
     modelShowMore: '[model] Show more',
     modelSearchOn: '[model] Search models on',
     modelSearchOff: '[model] Search models off',
+    modelStartUploadFile: '[model] Start upload file',
+    modelUploadFile: '[model] Upload file',
 }

@@ -7,17 +7,19 @@ import {
 } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 
-
-
 import MapScreen from '../components/map/MapScreen';
 import ModelsScreen from '../components/models/ModelsScreen';
 import VirtualScreen from '../components/paseoVirtual/VirtualScreen';
 import Navbar from '../components/ui/Navbar';
 import SideBar from '../components/ui/SideBar';
 import UserScreen from '../components/user/UserScreen';
+import AddModelScreen from '../components/models/AddModelScreen';
+import UpdateModelScreen from '../components/models/UpdateModelScreen';
 import { Container, CssBaseline, Grid } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { startGetUser } from '../actions/user';
+
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -60,6 +62,8 @@ const DashboardRoute = () => {
                                     <Route exact path='/' component={VirtualScreen}/>
                                     <Route exact path='/user' component={UserScreen}/>
                                     <Route exact path='/model' component={ModelsScreen}/>
+                                    <Route exact path='/model/add' component={AddModelScreen}/>
+                                    <Route exact path='/model/update/:modelId' component={UpdateModelScreen}/>
                                     <Route exact path='/map' component={MapScreen}/>
 
                                     <Redirect to="/"/>
