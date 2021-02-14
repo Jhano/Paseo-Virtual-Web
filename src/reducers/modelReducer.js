@@ -7,7 +7,7 @@ const initialState = {
     showMore: false,
     file: null,
     modelUpdate: {},
-    modelFind: {}
+    //modelfind
 }
 
 export const modelReducer = (state = initialState, action) => {
@@ -62,6 +62,12 @@ export const modelReducer = (state = initialState, action) => {
                 ...state,
                 modelFind: action.payload
             }
+        case types.modelClearModelFindModal:
+            return {
+                ...state,
+                modelFind: action.payload
+            }
+
 
         default:
             return state;

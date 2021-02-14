@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -10,15 +8,30 @@ import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import Brightness4Icon from '@material-ui/icons/Brightness4';
+import TextureIcon from '@material-ui/icons/Texture';
+import DescriptionIcon from '@material-ui/icons/Description';
+import TodayIcon from '@material-ui/icons/Today';
+import InfoIcon from '@material-ui/icons/Info';
+import LocationCityIcon from '@material-ui/icons/LocationCity';
+
 
 import { useDispatch, useSelector } from 'react-redux';
 import { closeModal } from '../../actions/ui';
+import { clearModelFind } from '../../actions/model';
 
 const useStyles = makeStyles((theme) => ({
+    modal: {
+      width: '800px',
+      height: '900px'
+
+    },
     root: {
         padding: theme.spacing(2),
-        width: '100%'
+        width: '100%',
+        background: '#000000',
+        color: '#f5f5f5 '
       },
       closeButton: {
         position: 'absolute',
@@ -50,10 +63,14 @@ const ModalShowMore = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const {activeModal } = useSelector(state => state.ui);
+    const {modelFind: model} = useSelector(state  => state.model) ;
 
-    const handleClose = () => [
-        dispatch(closeModal())
-    ]
+
+
+    const handleClose = () => {
+        dispatch(closeModal());
+        dispatch(clearModelFind());
+      }
 
     return (
         
@@ -65,26 +82,81 @@ const ModalShowMore = () => {
                     aria-modal="true"
                     maxWidth="lg"
                 >
-                    <MuiDialogTitle disableTypography className={classes.root}>
-                        <Typography variant="h6">Modelo: name</Typography>
-                        <IconButton aria-label="close" className={classes.closeButton} onClick={handleClose}>
-                            <CloseIcon />
-                        </IconButton> 
-                        <hr/>  
-                    </MuiDialogTitle> 
-                    <DialogContent>
-                    <DialogContentText>
-                    </DialogContentText>
-                    
-                    </DialogContent>
-                    <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        Cancel
-                    </Button>
-                    <Button onClick={handleClose} color="primary">
-                        Subscribe
-                    </Button>
-                    </DialogActions>
+                  {
+                    <div className={classes.modal}>
+                      <MuiDialogTitle disableTypography className={classes.root}>
+                          <Typography variant="h6">Modelo: {model ? `${model.data.name ? model.data.name : '"Nombre"'}` : '"Nombre"'}</Typography>
+                          <IconButton aria-label="close" className={classes.closeButton} onClick={handleClose}>
+                              <CloseIcon />
+                          </IconButton> 
+                          <hr/>  
+                      </MuiDialogTitle> 
+                      <DialogContent>
+                      <DialogContentText>
+                        <div style={{display: 'flex'}}>  
+                          <LocationCityIcon/>
+                          <Typography 
+                            variant="h6"
+                          >
+                            Modelo 3D: {model ?`${model.model.obj ? model.model.obj : '"Representación visual del modelo"'}` : '"Representación visual del modelo"'}
+                          </Typography>
+                        </div>
+                        <div style={{display: 'flex'}}> 
+                          <Brightness4Icon/>
+                          <Typography 
+                            variant="h6"
+                          >
+                              Sombras: {model ? `${model.model.shadow ? model.model.shadow : '"Las sombras que el modelo utiliza"'}`  : '"Las sombras que el modelo utiliza"'}
+                          </Typography>
+                        </div>
+                        <div style={{display: 'flex'}}>  
+                          <TextureIcon/>
+                          <Typography 
+                            variant="h6"
+                          >
+                            Texturas: {model ? `${model.model.texture ? model.model.texture : '"Texturas para mayor calidad del modelo"'}` : '"Texturas para mayor calidad del modelo"'}
+                          </Typography>
+                        </div>
+                        <div style={{display: 'flex'}}>  
+                          <DescriptionIcon/>
+                          <Typography 
+                            variant="h6"
+                          >
+                            Descreción Historica: {model ? `${model.data.description  ? model.data.description : '"La Descrioción"'}`  : '"La Descrioción"'}
+                          </Typography>
+                        </div>
+                        <div style={{display: 'flex'}}>  
+                          <TodayIcon/>
+                          <Typography 
+                            variant="h6"
+                          >
+                            Fecha Historica: {model ? `${model.data.dateMonument ? model.data.dateMonument : '"Fecha historica del modelo"'}` : '"Fecha historica del modelo"'}
+                          </Typography>
+                        </div>
+                        <div style={{display: 'flex'}}>  
+                          <InfoIcon/>
+                          <Typography 
+                            variant="h6"
+                          >
+                            Información Extra: {model ? `${model.data.extraInfo ? model.data.extraInfo : '"Información extra relevante del modelo"'}` : '"Información extra relevante del modelo"'}
+                          </Typography>
+                        </div>
+                        <div style={{display: 'flex'}}>
+                          <LocationOnIcon/>
+                          <Typography 
+                            variant="h6"
+                          > 
+                            Location: {model ? `${model.location ? JSON.stringify(model.location, null, 3) : '"Localización"'}` : '"Localización"'}
+                          </Typography>
+                        </div>
+                       
+                      </DialogContentText>
+                      
+                      </DialogContent>
+                      <DialogActions>
+                      </DialogActions>
+                    </div>
+                  } 
                 </Dialog>
                             
     );

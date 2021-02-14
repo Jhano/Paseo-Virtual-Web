@@ -86,14 +86,35 @@ const obtenerModelo = async(req, res = response) => {
 
     let id = req.params.id;
 
+
     try {
         const modelo = await Modelo.findById(id)
             .populate('usuarioId', 'name email');
 
+        let objModelo = {
+            id: modelo.id,
+            location: {
+                lat: modelo.lat,
+                lng: modelo.lng,
+                ejeZ: modelo.ejeZ,
+            },
+            model: {
+                obj: modelo.fileModel,
+                texture: modelo.texture,
+                shadow: modelo.shadow
+            },
+            data: {
+                name: modelo.name,
+                description: modelo.description,
+                extraInfo: modelo.extraInfo,
+                dateMonument: modelo.dateMonument
+            },
+            user: modelo.usuarioId
+        }
 
         res.json({
             ok: true,
-            modelo
+            modelo: objModelo
         })
 
     } catch (err) {
@@ -219,7 +240,7 @@ const objModels = (modelos) => {
         id: modelo.id,
         location: {
             lat: modelo.lat,
-            long: modelo.long,
+            lng: modelo.lng,
             ejeZ: modelo.ejeZ,
         },
         model: {

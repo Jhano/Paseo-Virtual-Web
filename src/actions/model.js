@@ -2,11 +2,11 @@ import Swal from "sweetalert2";
 import validator from "validator";
 import { fetchConToken, fetchUpload } from "../helpers/fetch";
 import { types } from "../types/types";
-import { finishLoading, selectedFileModel, startLoading } from "./ui";
+import { finishLoading, openModal, selectedFileModel, startLoading } from "./ui";
 
 
 //comienza a hacer la peticion para cargar los modelos
-export const startLoadingModels = (desde, limite) => {
+export const startLoadingModels = (desde = 0, limite = 0) => {
     return async(dispatch) => {
 
 
@@ -129,7 +129,7 @@ export const startUpdateModel = (id, dataAdd, file) => {
             }
         }
 
-       
+
 
         const resp = await fetchConToken(`modelos/${id}`, coypdata, 'PUT');
         const data = await resp.json();
@@ -138,9 +138,9 @@ export const startUpdateModel = (id, dataAdd, file) => {
             dispatch(updateModel(data.modelo));
             dispatch(startFindModel(id));
             dispatch(startLoadingModels(0, 5));
-            if(file !== ''){
+            if (file !== '') {
                 dispatch(startUploadFileModel(data.modelo._id, file));
-            }        
+            }
             Swal.fire('Success', 'Modelo actualizado Correctamente');
         } else {
             Swal.fire('No se ha podido actualizar el modelo', data.err, 'error');
@@ -189,7 +189,7 @@ const uploadFileModel = (model, file) => ({
     }
 })
 
-export const startFindModel = (id) => {
+export const startFindModel = (id, modal = false) => {
 
     return async(dispatch) => {
 
@@ -198,8 +198,14 @@ export const startFindModel = (id) => {
         const data = await resp.json();
 
         if (data.ok) {
+            if (modal) {
+                dispatch(findModel(data.modelo));
+                dispatch(openModal());
+            } else {
+                dispatch(findModel(data.modelo));
+            }
             dispatch(findModel(data.modelo));
-            if(data.modelo?.fileModel){
+            if (data.modelo?.fileModel) {
                 dispatch(selectedFileModel(''));
             }
         } else {
@@ -212,5 +218,11 @@ export const startFindModel = (id) => {
 const findModel = (model) => ({
     type: types.modelFindById,
     payload: model
+
+})
+
+export const clearModelFind = () => ({
+    type: types.modelClearModelFindModal,
+    payload: undefined
 
 })

@@ -45,7 +45,7 @@ let modeloSchema = new Schema({
         type: Number,
         default: 0
     },
-    long: {
+    lng: {
         type: Number,
         default: 0
     },

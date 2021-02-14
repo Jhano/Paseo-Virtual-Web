@@ -46,4 +46,5 @@ export const types = {
     modelSearchOff: '[model] Search models off',
     modelStartUploadFile: '[model] Start upload file',
     modelUploadFile: '[model] Upload file',
+    modelClearModelFindModal: '[model] Clear modelFind modal',
 }

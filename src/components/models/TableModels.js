@@ -13,9 +13,9 @@ import UpdateIcon from '@material-ui/icons/Update';
 import MoreIcon from '@material-ui/icons/More';
 import { Button, TableHead } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { changePage, changeRowsPerPage, changeDesde, changeDesdeSearch, changeRowsPerPageSearch, openModal } from '../../actions/ui';
+import { changePage, changeRowsPerPage, changeDesde, changeDesdeSearch, changeRowsPerPageSearch } from '../../actions/ui';
 import TablePaginationAction from '../ui/TablePaginationAction';
-import { startDeleteModel } from '../../actions/model';
+import { startDeleteModel, startFindModel } from '../../actions/model';
 import { Link } from 'react-router-dom';
 
 
@@ -74,8 +74,8 @@ const TableModels = () => {
         dispatch(startDeleteModel(id))
     }
 
-    const handleModal = () => {
-      dispatch(openModal())
+    const handleModal = (mid) => {
+      dispatch(startFindModel(mid, true))
     }
  
 
@@ -125,7 +125,7 @@ const TableModels = () => {
                         variant="contained" 
                         color="default"
                         type="button"  
-                        onClick={handleModal}  
+                        onClick={() =>  handleModal(model.id)}  
                     >
                         <MoreIcon />
                     </Button>
