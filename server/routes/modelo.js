@@ -20,7 +20,7 @@ const router = Router();
 
 router.get("/", obtenerModelos);
 
-router.get("/:id", obtenerModelo);
+router.get("/:id", validarJWT, obtenerModelo);
 
 router.get("/buscar/:termino", validarJWT, searchModelo);
 
