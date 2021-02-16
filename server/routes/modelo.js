@@ -18,9 +18,9 @@ const { validarRole } = require("../middlewares/validar-role");
 
 const router = Router();
 
-router.get("/", validarJWT, validarRole, obtenerModelos);
+router.get("/", obtenerModelos);
 
-router.get("/:id", validarJWT, obtenerModelo);
+router.get("/:id", obtenerModelo);
 
 router.get("/buscar/:termino", validarJWT, searchModelo);
 

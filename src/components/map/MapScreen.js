@@ -1,13 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import GoogleMapReact from 'google-map-react';
 import { useDispatch, useSelector } from 'react-redux';
+import { makeStyles } from '@material-ui/core/styles';
 
 import { startLoadingModels } from '../../actions/model';
 import Marker from './Marker';
 import { Typography } from '@material-ui/core';
-import RoomIcon from '@material-ui/icons/Room';
+
+
+const useStyles = makeStyles(() => ({
+    box: {
+        border: '2px solid black',
+        padding: '15px',
+        width: '300px'
+    },
+}));
 
 const MapScreen = () => {
+    const classes = useStyles();
 
     const dispatch = useDispatch();
     const [isOpen, setIsOpen] = useState(false);
@@ -30,7 +40,12 @@ const MapScreen = () => {
     }
 
     return (     
-        <div style={{height: '100vh', width:'100%'}}>
+        <div style={{display: 'flex', flexDirection: 'column',height: '100vh', width:'100%'}}>
+            <div style={{display:'flex', justifyContent:'center', marginBottom: '15px'}}>
+                <div className={classes.box}>
+                    <Typography>{isModelName}</Typography> 
+                </div>
+            </div>
             <GoogleMapReact
                 bootstrapURLKeys={{ key: 'AIzaSyDrAodj56Ovg30O75OC6wUpghZr77mhCPs' }}
                 defaultZoom={10}
