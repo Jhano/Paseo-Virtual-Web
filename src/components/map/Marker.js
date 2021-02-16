@@ -6,7 +6,9 @@ import { IconButton, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
     root: {
-        color: 'red',      
+        position: 'absolute',
+        color: 'red',  
+        transform: 'translate(-50%, -50%)',     
     },
 }));
 
@@ -20,11 +22,11 @@ const Marker = ({ name, onClick, isOpen,isModelName }) => {
             >
             
                 <RoomIcon fontSize="large"  className={classes.root}/>  
-                {
+            </IconButton>  
+            {
                     isOpen &&
                     <Typography style={{color:'whitesmoke'}}>{name}</Typography>                
-                }
-            </IconButton>  
+            }
         </div>
         
     )
