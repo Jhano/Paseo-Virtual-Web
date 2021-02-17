@@ -118,13 +118,14 @@ const addModel = (model) => ({
 })
 
 //comenzar a actualizar el modelo
-export const startUpdateModel = (id, dataAdd, file) => {
+export const startUpdateModel = (id, dataAdd, file = '') => {
     return async(dispatch) => {
 
         const coypdata = dataAdd;
+        console.log(coypdata);
 
         for (const object in coypdata) {
-            if (validator.isEmpty(coypdata[object])) {
+            if (validator.isEmpty(coypdata[object])  ) {
                 delete coypdata[object];
             }
         }

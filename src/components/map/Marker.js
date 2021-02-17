@@ -12,13 +12,13 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const Marker = ({ name, onClick, isOpen,isModelName }) => {
+const Marker = ({ name, onClick, isOpen, mId }) => {
     const classes = useStyles();
 
     return (
         <div style={{position: 'absolute'}}>
             <IconButton
-                onClick={() => onClick(name)}
+                onClick={() => onClick(name, mId)}
             >
             
                 <RoomIcon fontSize="large"  className={classes.root}/>  

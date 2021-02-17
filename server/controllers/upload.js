@@ -30,7 +30,7 @@ const uploadFile = async(req, res = response) => {
         let extension = nombreCortado[nombreCortado.length - 1];
 
 
-        let extensionesValidas = ['png', 'jpg', 'jpeg', 'obj', 'sbf'];
+        let extensionesValidas = ['png', 'jpg', 'jpeg', 'obj', 'sfb'];
 
         if (extensionesValidas.indexOf(extension) < 0) {
             error(res, err = {

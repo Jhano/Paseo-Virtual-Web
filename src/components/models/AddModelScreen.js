@@ -59,12 +59,12 @@ const AddModelScreen = ({history}) => {
         description: '',
         extraInfo: '',
         lat: '',
-        long: '',
+        lng: '',
         ejeZ: '',
         dateMonument: '',
     })
 
-    const { name, texture, shadow, description, extraInfo, lat, long, ejeZ, dateMonument } = formValues;
+    const { name, texture, shadow, description, extraInfo, lat, lng, ejeZ, dateMonument } = formValues;
 
     const handleCapture = ({ target }) => {
         const file = target.files[0]
@@ -94,7 +94,7 @@ const AddModelScreen = ({history}) => {
                 description,
                 extraInfo,
                 lat,
-                long,
+                lng,
                 ejeZ,
                 dateMonument,
                 fileModel: selectedFile.name
@@ -106,7 +106,7 @@ const AddModelScreen = ({history}) => {
                 description: '',
                 extraInfo: '',
                 lat: '',
-                long: '',
+                lng: '',
                 ejeZ: '',
                 dateMonument: '',
             });
@@ -158,8 +158,8 @@ const AddModelScreen = ({history}) => {
               return false;
             }
         }
-        if(!validator.isEmpty(long)){
-            if(!validator.isNumeric(long)){ 
+        if(!validator.isEmpty(lng)){
+            if(!validator.isNumeric(lng)){ 
               dispatch(setError('Longitud no válida'));
               return false;
             }
@@ -175,8 +175,8 @@ const AddModelScreen = ({history}) => {
             const extension = fileName.split('.');
 
             const extensionValida = extension[1];
-            if(extensionValida !== 'obj'){
-              dispatch(setError('Modelo, la extensión debe ser .obj'));
+            if(extensionValida !== 'obj' || extensionValida !== 'sfb'){
+              dispatch(setError('Modelo, la extensión debe ser .obj o .sfb'));
               return false;
             }
         }
@@ -351,14 +351,14 @@ const AddModelScreen = ({history}) => {
                                     error={msgError?.includes('Longitud') ? validatedError : false}
                                     helperText={msgError?.includes('Longitud') && msgError}
                                     margin="dense"
-                                    id="long"
-                                    name="long"                
+                                    id="lng"
+                                    name="lng"                
                                     label="Longitud:"
                                     type="number"  
                                     variant="outlined"
                                     placeholder="Agregar Longitud..."
                                     autoComplete="off"
-                                    value={long}
+                                    value={lng}
                                     onChange={handleInputChange}
                                 />
                                 <TextField

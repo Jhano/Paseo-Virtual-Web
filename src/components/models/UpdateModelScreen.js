@@ -68,14 +68,14 @@ const UpdateModelScreen = ({history}) => {
         description: '',
         extraInfo: '',
         lat: '',
-        long: '',
+        lng: '',
         ejeZ: '',
         dateMonument: '',
     })
 
 
 
-    const { name, texture, shadow, description, extraInfo, lat, long, ejeZ, dateMonument } = formValues;
+    const { name, texture, shadow, description, extraInfo, lat, lng, ejeZ, dateMonument } = formValues;
 
     const handleCapture = ({ target }) => {
         const file = target.files[0]
@@ -101,7 +101,7 @@ const UpdateModelScreen = ({history}) => {
                 description,
                 extraInfo,
                 lat,
-                long,
+                lng,
                 ejeZ,
                 dateMonument,
                 fileModel: selectedFile.name ? selectedFile.name : '',
@@ -113,7 +113,7 @@ const UpdateModelScreen = ({history}) => {
                 description: '',
                 extraInfo: '',
                 lat: '',
-                long: '',
+                lng: '',
                 ejeZ: '',
                 dateMonument: '',
             });
@@ -129,10 +129,12 @@ const UpdateModelScreen = ({history}) => {
             description,
             extraInfo,
             lat,
-            long,
+            lng,
             ejeZ,
             dateMonument,
         }
+
+     
 
         for (const object in copyData) {
             if (validator.isEmpty(copyData[object])) {
@@ -186,8 +188,8 @@ const UpdateModelScreen = ({history}) => {
               return false;
             }
         }
-        if(!validator.isEmpty(long)){
-            if(!validator.isNumeric(long)){ 
+        if(!validator.isEmpty(lng)){
+            if(!validator.isNumeric(lng)){ 
               dispatch(setError('Longitud no válida'));
               return false;
             }
@@ -360,14 +362,14 @@ const UpdateModelScreen = ({history}) => {
                                     error={msgError?.includes('Longitud') ? validatedError : false}
                                     helperText={msgError?.includes('Longitud') && msgError}
                                     margin="dense"
-                                    id="long"
-                                    name="long"                
+                                    id="lng"
+                                    name="lng"                
                                     label="Longitud:"
                                     type="number"  
                                     variant="outlined"
-                                    placeholder={modelFind ? `${modelFind.long ? modelFind.long : 'Subir longitud'}...` : 'Subir longitud...'}
+                                    placeholder={modelFind ? `${modelFind.lng ? modelFind.lng : 'Subir longitud'}...` : 'Subir longitud...'}
                                     autoComplete="off"
-                                    value={long}
+                                    value={lng}
                                     onChange={handleInputChange}
                                 />
                                 <TextField

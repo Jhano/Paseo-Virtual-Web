@@ -3,7 +3,7 @@ import GoogleMapReact from 'google-map-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { startLoadingModels } from '../../actions/model';
+import { startLoadingModels, startUpdateModel } from '../../actions/model';
 import Marker from './Marker';
 import { Grid, IconButton, Typography } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
@@ -24,6 +24,7 @@ const MapScreen = () => {
     const dispatch = useDispatch();
     const [isOpen, setIsOpen] = useState(false);
     const [isModelName, setIsModelName] = useState(false);
+    const [mId, setMId] = useState(false);
     const [isMap, setIsMap] = useState();
 
     useEffect(() => {
@@ -32,8 +33,9 @@ const MapScreen = () => {
 
     const {models} = useSelector(state => state.model);
 
-    const handleInfo = (name) => {
-        setIsModelName(name);     
+    const handleInfo = (name, mid) => {
+        setIsModelName(name);   
+        setMId(mid)  
     }
 
     const handleAllName = () => {    
@@ -42,7 +44,8 @@ const MapScreen = () => {
     }
 
     const handleDeleteLocation = () => {
-        console.log('Eliminar');
+        console.log("mid:", mId );
+        dispatch(startUpdateModel(mId,{lat: '0', lng: '0'}))
     }
 
     const handleApiLoaded = (map, maps) => {
@@ -98,6 +101,7 @@ const MapScreen = () => {
                                     onClick={handleInfo}
                                     isOpen={isOpen}
                                     key={model.id}
+                                    mId={model.id}
                                     name={model.data.name}
                                     lat={model.location.lat}
                                     lng={model.location.lng}
