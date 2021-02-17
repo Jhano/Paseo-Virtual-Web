@@ -24,8 +24,7 @@ const MapScreen = () => {
     const dispatch = useDispatch();
     const [isOpen, setIsOpen] = useState(false);
     const [isModelName, setIsModelName] = useState(false);
-    const [mId, setMId] = useState(false);
-    const [isMap, setIsMap] = useState();
+    const [mId, setMId] = useState('');
 
     useEffect(() => {
         dispatch(startLoadingModels());
@@ -44,14 +43,12 @@ const MapScreen = () => {
     }
 
     const handleDeleteLocation = () => {
-        console.log("mid:", mId );
         dispatch(startUpdateModel(mId,{lat: '0', lng: '0'}))
+        setMId('')  
     }
 
-    const handleApiLoaded = (map, maps) => {
-        
-        setIsMap(map);
-        console.log(isMap);
+    const handleApiLoaded = (map, maps) => {     
+
     };
 
     const handleAddMarker = ({ x, y, lat, lng, event }) => {

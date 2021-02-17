@@ -39,9 +39,6 @@ export const startDeleteModel = (id) => {
         const resp = await fetchConToken(`modelos/${id}`, '', 'DELETE');
         const data = await resp.json();
 
-        console.log(data.modelo);
-
-
         if (data.ok) {
             dispatch(deleteModel(data.modelo))
         } else {
