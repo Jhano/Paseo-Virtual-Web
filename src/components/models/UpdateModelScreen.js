@@ -205,7 +205,7 @@ const UpdateModelScreen = ({history}) => {
             const extension = fileName.split('.');
 
             const extensionValida = extension[1];
-            if(extensionValida !== 'obj' || extensionValida !== 'sfb'){
+            if(extensionValida !== 'obj' && extensionValida !== 'sfb'){
               dispatch(setError('Modelo, la extensión debe ser .obj o .sfb'));
               return false;
             }
