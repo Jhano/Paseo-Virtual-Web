@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import RoomIcon from '@material-ui/icons/Room';
 import { IconButton, Typography } from '@material-ui/core';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -12,19 +13,22 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const Marker = ({ name, onClick, isOpen, mId }) => {
+const Marker = ({ name, onClick, mId }) => {
     const classes = useStyles();
+
+    const {visible} = useSelector(state => state.map)
+    
 
     return (
         <div style={{position: 'absolute'}}>
             <IconButton
-                onClick={() => onClick(name, mId)}
+                onClick={() => onClick(mId, name)}
             >
             
                 <RoomIcon fontSize="large"  className={classes.root}/>  
             </IconButton>  
             {
-                    isOpen &&
+                    visible &&
                     <Typography style={{color:'whitesmoke'}}>{name}</Typography>                
             }
         </div>

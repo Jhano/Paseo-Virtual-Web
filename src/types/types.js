@@ -47,4 +47,11 @@ export const types = {
     modelStartUploadFile: '[model] Start upload file',
     modelUploadFile: '[model] Upload file',
     modelClearModelFindModal: '[model] Clear modelFind modal',
+
+    mapModelStartLoading: '[map] Model start loading',
+    mapModelLoading: '[map] Model loading',
+    mapModelStartUpdate: '[map] Model start update',
+    mapModelUpdate: '[map] Model update',
+    mapShowModelAll: '[map] Show model all',
+    mapSelectModel: '[map] Select Model',
 }

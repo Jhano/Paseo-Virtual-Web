@@ -1,30 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import GoogleMapReact from 'google-map-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
 
-import { startLoadingModels, startUpdateModel } from '../../actions/model';
+
+import { startLoadingModels } from '../../actions/model';
 import Marker from './Marker';
-import { Grid, IconButton, Typography } from '@material-ui/core';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { mapStartUpdateModel, showAllModel, mapSelectModel } from '../../actions/map';
+import BarraMenu from './BarraMenu';
 
-
-const useStyles = makeStyles(() => ({
-    box: {
-        border: '2px solid black',
-        padding: '15px',
-        height: '50px'
-    },
-}));
 
 const MapScreen = () => {
-    const classes = useStyles();
+
+    const [mlat, setLat] = useState(0);
+    const [mlng, setLng] = useState(0);
 
     const dispatch = useDispatch();
-    const [isOpen, setIsOpen] = useState(false);
-    const [isModelName, setIsModelName] = useState(false);
-    const [mId, setMId] = useState('');
+    const {selectModel} = useSelector(state => state.map)
+    const {mId} = selectModel;
 
     useEffect(() => {
         dispatch(startLoadingModels());
@@ -32,81 +24,76 @@ const MapScreen = () => {
 
     const {models} = useSelector(state => state.model);
 
-    const handleInfo = (name, mid) => {
-        setIsModelName(name);   
-        setMId(mid)  
+    const handleInfo = (mid, name) => {
+        dispatch(mapSelectModel(mid, name));
     }
 
     const handleAllName = () => {    
-        setIsModelName('');  
-        setIsOpen((current) => !current );             
+        dispatch(mapSelectModel());
+        dispatch(showAllModel());          
     }
 
     const handleDeleteLocation = () => {
-        dispatch(startUpdateModel(mId,{lat: '0', lng: '0'}))
-        setMId('')  
+        dispatch(mapStartUpdateModel(mId, {lat: 0, lng: 0}));
+        dispatch(mapSelectModel());
     }
-
-    const handleApiLoaded = (map, maps) => {     
-
-    };
 
     const handleAddMarker = ({ x, y, lat, lng, event }) => {
         console.log(x, y, lat, lng, event );
+        setLat(lat);
+        setLng(lng);
     };
 
+    const handleApiLoaded = (map, maps) => {
+        console.log(map, maps)
+    } 
+
+    const getMapOptions = (maps) => ({
+          disableDefaultUI: true,
+          mapTypeControl: true,
+          streetViewControl: true,
+          styles: [{ featureType: 'poi', elementType: 'labels', stylers: [{ visibility: 'on' }] }],
+          gestureHandlin: 'none',
+      });
+
+
     return (     
-        <div style={{display: 'flex', flexDirection: 'column',height: '80vh', width:'100%'}}>
-            <div style={{display:'flex', justifyContent:'center', marginBottom: '15px'}}>
-                <Grid xs={3} sm={3} md={3} lg={3} xl={3} item style={{display: 'flex', justifyContent:'flex-end'}}>
-                    <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleAllName}
-                            >
-                            { isOpen ? <Visibility/> : <VisibilityOff /> }
-                    </IconButton> 
-                </Grid>
-                <Grid xs={6} sm={6} md={6} lg={6} xl={6}  item>
-                    <div className={classes.box}>
-                        <Typography style={{textAlign: 'center'}}>{isModelName}</Typography> 
-                    </div>
-                </Grid>
-                <Grid xs={3} sm={3} md={3} lg={3} xl={3} style={{display: 'flex', justifyContent:'flex-start'}} item>
-                    {
-                        isModelName.length ?
-                        <IconButton
-                            aria-label="Eliminar localización"
-                            onClick={handleDeleteLocation}
-                        >
-                            <DeleteIcon style={{color: 'red'}}/>
-                        </IconButton>
-                        : ''
-                    }
-                </Grid>       
-            </div>
+        <div style={{display: 'flex', flexDirection: 'column',height: '80vh', width:'100%', }}>
+            <BarraMenu 
+                handleAllName={handleAllName}
+                handleDeleteLocation={handleDeleteLocation}
+            />
             <GoogleMapReact
-                bootstrapURLKeys={{ key: 'AIzaSyDrAodj56Ovg30O75OC6wUpghZr77mhCPs' }}
+                bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE }}
                 defaultZoom={10}
                 defaultCenter={{ lat: -37.029739, lng:  -72.401045 }}
                 yesIWantToUseGoogleMapApiInternals
                 onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}    
                 onClick={handleAddMarker}
+                options={getMapOptions}    
             >  
                 {
                     models.map(model => (
-                            <Marker
-                                    onClick={handleInfo}
-                                    isOpen={isOpen}
-                                    key={model.id}
-                                    mId={model.id}
-                                    name={model.data.name}
-                                    lat={model.location.lat}
-                                    lng={model.location.lng}
-                                    isModelName={isModelName}
-                            />              
-                    ))                  
+                            (model.location.lat !== 0 || model.location.lng !== 0 )
+                                &&
+                                    <Marker
+                                        onClick={handleInfo}
+                                        key={model.id}
+                                        mId={model.id}
+                                        name={model.data.name}
+                                        lat={model.location.lat}
+                                        lng={model.location.lng}
+                                    />                           
+                            ))                  
                 }  
                 
+                    {/* <div style={{height: '18px', width:'18px', backgroundColor:'black', transform: 'translate(-50%, -50%)', borderRadius:'100%', border:'2px solid white' }}
+                        lat={mlat}
+                        lng={mlng}
+                    >
+
+                    </div> */}
+                      
             </GoogleMapReact>
         </div>   
     )

@@ -130,7 +130,7 @@ const ModalShowMore = () => {
                           <Typography 
                             variant="h6"
                           >
-                            Fecha Historica: {model ? `${model.data.dateMonument ? model.data.dateMonument : '"Fecha historica del modelo"'}` : '"Fecha historica del modelo"'}
+                            Fecha Historica: {model ? `${model.data.dateMonument ? model.data.dateMonument.split('T')[0] : '"Fecha historica del modelo"'}` : '"Fecha historica del modelo"'}
                           </Typography>
                         </div>
                         <div style={{display: 'flex'}}>  
