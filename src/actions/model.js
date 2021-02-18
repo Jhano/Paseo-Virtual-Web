@@ -2,7 +2,7 @@ import Swal from "sweetalert2";
 import validator from "validator";
 import { fetchConToken, fetchUpload } from "../helpers/fetch";
 import { types } from "../types/types";
-import { finishLoading, openModal, selectedFileModel, startLoading } from "./ui";
+import { finishLoading, openModal, selectedFileModel, selectedFileModelFormat, startLoading } from "./ui";
 
 
 //comienza a hacer la peticion para cargar los modelos
@@ -83,7 +83,7 @@ export const searchModelsOff = () => ({
 })
 
 //comenzar a agregar un modelo
-export const startAddModel = (dataAdd, file) => {
+export const startAddModel = (dataAdd, file = '', fileFormat = '') => {
     return async(dispatch) => {
 
         const coypdata = dataAdd;
@@ -100,7 +100,8 @@ export const startAddModel = (dataAdd, file) => {
 
         if (data.ok) {
             dispatch(addModel(data.modelo));
-            dispatch(startUploadFileModel(data.modelo._id, file));
+            file !== '' &&  dispatch(startUploadFileModel(data.modelo._id, file));
+            fileFormat !== '' &&  dispatch(startUploadFileModel(data.modelo._id, fileFormat));
             dispatch(startLoadingModels(0, 5));
             Swal.fire('Success', 'Modelo agregado Correctamente');
         } else {
@@ -115,7 +116,7 @@ const addModel = (model) => ({
 })
 
 //comenzar a actualizar el modelo
-export const startUpdateModel = (id, dataAdd, file = '') => {
+export const startUpdateModel = (id, dataAdd, file = '', fileFormat = '') => {
     return async(dispatch) => {
 
         const coypdata = dataAdd;
@@ -134,10 +135,11 @@ export const startUpdateModel = (id, dataAdd, file = '') => {
         if (data.ok) {
             dispatch(updateModel(data.modelo));
             dispatch(startFindModel(id));
+            
+            file !== '' &&  dispatch(startUploadFileModel(data.modelo._id, file));
+            fileFormat !== '' &&  dispatch(startUploadFileModel(data.modelo._id, fileFormat));
             dispatch(startLoadingModels(0, 5));
-            if (file !== '') {
-                dispatch(startUploadFileModel(data.modelo._id, file));
-            }
+                   
             Swal.fire('Success', 'Modelo actualizado Correctamente');
         } else {
             Swal.fire('No se ha podido actualizar el modelo', data.err, 'error');
@@ -158,6 +160,8 @@ export const startUploadFileModel = (id, file) => {
 
         dispatch(startLoading());
 
+        let extension  = file.name.split('.')[1];
+
         const formData = new FormData();
         formData.append('archivo', file);
 
@@ -165,10 +169,10 @@ export const startUploadFileModel = (id, file) => {
         const data = await resp.json();
 
         if (data.ok) {
-
-            dispatch(uploadFileModel(data.modelo, data.fileModel));
+            extension === 'bin' ? dispatch(uploadFileModel(data.modelo, data.upload)) : dispatch(uploadFileModelFormat(data.modelo, data.upload));
             dispatch(finishLoading());
             dispatch(selectedFileModel(''));
+            dispatch(selectedFileModelFormat(''));
             dispatch(startFindModel(id));
         } else {
 
@@ -183,6 +187,14 @@ const uploadFileModel = (model, file) => ({
     payload: {
         model,
         file
+    }
+})
+
+const uploadFileModelFormat = (model, fileFormat) => ({
+    type: types.modelUploadFileFormat,
+    payload: {
+        model,
+        fileFormat
     }
 })
 

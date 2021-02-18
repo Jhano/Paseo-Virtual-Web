@@ -63,8 +63,6 @@ const MapScreen = () => {
                    
                 }
                 
-            
-            
             <GoogleMapReact
                 bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE }}
                 defaultZoom={10}

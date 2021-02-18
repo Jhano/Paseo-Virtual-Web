@@ -11,7 +11,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
 
-import { removeError, selectedFileModel, setError } from '../../actions/ui';
+import { removeError, selectedFileModel, selectedFileModelFormat, setError } from '../../actions/ui';
 import { useForm } from '../../hooks/useForm';
 import { startAddModel } from '../../actions/model';
 
@@ -51,11 +51,9 @@ const AddModelScreen = ({history}) => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const {loading, selectedFile, validatedError, msgError} = useSelector(state => state.ui);
+    const {loading, selectedFile, selectedFileFormat, validatedError, msgError} = useSelector(state => state.ui);
     const [formValues, handleInputChange, reset] = useForm({
         name: '',
-        texture: '',
-        shadow: '',
         description: '',
         extraInfo: '',
         lat: '',
@@ -64,9 +62,9 @@ const AddModelScreen = ({history}) => {
         dateMonument: '',
     })
 
-    const { name, texture, shadow, description, extraInfo, lat, lng, ejeZ, dateMonument } = formValues;
+    const { name, description, extraInfo, lat, lng, ejeZ, dateMonument } = formValues;
 
-    const handleCapture = ({ target }) => {
+    const handleFileModel = ({ target }) => {
         const file = target.files[0]
         if(file){
             dispatch(selectedFileModel(file));
@@ -76,33 +74,31 @@ const AddModelScreen = ({history}) => {
         
     };
 
+    const handleFileFormat = ({ target }) => {
+        const fileFormat = target.files[0]
+        if(fileFormat){
+            dispatch(selectedFileModelFormat(fileFormat));
+        }else{
+            dispatch(selectedFileModelFormat(''));
+        }
+        
+    };
+
     const handleReturn = () => {
-        
-        
-        history.push('/model');
-        
-        
+        history.push('/model');    
     }
 
     const handleSubmit = (e) => {
-        e.preventDefault();           
+        e.preventDefault();        
         if(isFormValid()){
+           
             dispatch(startAddModel({
-                name,
-                texture,
-                shadow,
-                description,
-                extraInfo,
-                lat,
-                lng,
-                ejeZ,
-                dateMonument,
-                fileModel: selectedFile.name
-            }, selectedFile));
+                ...formValues,
+                fileModel: selectedFile.name ? selectedFile.name : '',
+                fileFormat: selectedFileFormat.name ? selectedFileFormat.name : ''
+            }, selectedFile, selectedFileFormat));
             reset({
                 name: '',
-                texture: '',
-                shadow: '',
                 description: '',
                 extraInfo: '',
                 lat: '',
@@ -110,7 +106,9 @@ const AddModelScreen = ({history}) => {
                 ejeZ: '',
                 dateMonument: '',
             });
+            
             document.getElementById("contained-button-file").value= '';
+            document.getElementById("contained-button-fileFormat").value= '';
             
         }
     }
@@ -119,18 +117,6 @@ const AddModelScreen = ({history}) => {
         if(!validator.isEmpty(name)){
             if(name.length <= 2){ 
               dispatch(setError('Nombre no válido'));
-              return false;
-            }
-        }
-        if(!validator.isEmpty(texture)){
-            if(texture.length <= 2){ 
-              dispatch(setError('Textura no válida'));
-              return false;
-            }
-        }
-        if(!validator.isEmpty(shadow)){
-            if(shadow.length <= 2){ 
-              dispatch(setError('Sombra no válida'));
               return false;
             }
         }
@@ -175,16 +161,26 @@ const AddModelScreen = ({history}) => {
             const extension = fileName.split('.');
 
             const extensionValida = extension[1];
-            if(extensionValida !== 'obj' && extensionValida !== 'sfb'){
-              dispatch(setError('Modelo, la extensión debe ser .obj o .sfb'));
+            if(extensionValida !== 'bin'){
+              dispatch(setError('Modelo, la extensión debe ser .bin'));
               return false;
             }
         }
         if(selectedFile === ''){
-            dispatch(setError('Modelo, file es necesario'));
+            dispatch(setError('Modelo, file modelo 3D es necesario'));
             return false;           
         }
-        if(name === '' && texture === '' && shadow === '' && selectedFile === ''){
+        if( selectedFileFormat !== ''){
+            const fileName = selectedFileFormat.name;
+            const extension = fileName.split('.');
+
+            const extensionValida = extension[1];
+            if(extensionValida !== 'gltf'){
+              dispatch(setError('FileFormat, la extensión del archivo del modelo debe ser .gltf'));
+              return false;
+            }
+        }
+        if(name === '' && selectedFile === ''){
             return false;
         }
     
@@ -214,8 +210,6 @@ const AddModelScreen = ({history}) => {
                     Para no tener problemas al agregar un modelo, es necesario llenar las casillas de:
                     <li>Nombre del modelo.</li>
                     <li>Modelo 3D.</li>
-                    <li>Texturas.</li>
-                    <li>Sombras.</li>
             </Typography>
             <form onSubmit={handleSubmit}>
                 <Grid container style={{display: 'flex', marginTop:'10px'}}>              
@@ -239,41 +233,89 @@ const AddModelScreen = ({history}) => {
                                 onChange={handleInputChange}
                             />
                             <Typography>
-                                Texturas del modelo:
-                            </Typography>
-                            <TextField
-                                error={msgError?.includes('Textura') ? validatedError : false}
-                                helperText={msgError?.includes('Textura') && msgError}
-                                margin="dense"
-                                id="texture"
-                                required
-                                name="texture"
-                                label="Texturas:"
-                                type="text" 
-                                variant="outlined" 
-                                placeholder="Subir sombras..."
-                                autoComplete="off"
-                                value={texture}
-                                onChange={handleInputChange}
-                            /> 
+                                Subir modelo 3D:
+                                </Typography>
+                                <input
+                                        id="contained-button-file"
+                                        type="file"   
+                                        className={classes.inputImg}     
+                                        onChange={handleFileModel}
+                                />
+                                <label  style={{display:'flex'}} htmlFor="contained-button-file" > 
+                                    
+                                    <Button
+                                        type="button"
+                                        variant="contained"
+                                        color="secondary"
+                                        component="span"
+                                        className={classes.upload}
+                                        aria-label="Upload Image" 
+                                        disabled={loading}
+                                    >
+                                        <CloudUploadIcon/>
+                                    </Button>
+                                    <TextField
+                                        error={msgError?.includes('Modelo') ? validatedError : false}
+                                        helperText={msgError?.includes('Modelo') && msgError}
+                                        margin="dense"
+                                        id="fileModel"
+                                        type="text" 
+                                        variant="outlined" 
+                                        style={{width: '100%'}}
+                                        required
+                                        value={selectedFile ? selectedFile.name : ''}
+                                        placeholder="Seleccione un modelo..."
+                                        InputProps={{
+                                            readOnly: true,
+                                        }}
+                                    />    
+                                </label> 
                             <Typography>
-                                Sombras del modelo:
+                                Localización del modelo:
                             </Typography>
                             <TextField
-                                error={msgError?.includes('Sombra') ? validatedError : false}
-                                helperText={msgError?.includes('Sombra') && msgError}
-                                margin="dense"
-                                id="shadow"
-                                required
-                                name="shadow"
-                                label="Sombras:"
-                                type="text"
-                                placeholder="Subir sombras..."
-                                variant="outlined"
-                                autoComplete="off"
-                                value={shadow}
-                                onChange={handleInputChange}
-                            />                    
+                                    error={msgError?.includes('Latitud') ? validatedError : false}
+                                    helperText={msgError?.includes('Latitud') && msgError}
+                                    margin="dense"                            
+                                    id="lat"
+                                    name="lat"
+                                    label="Latitud:"
+                                    type="number"  
+                                    variant="outlined"
+                                    placeholder="Agregar Latitud..."
+                                    autoComplete="off"
+                                    value={lat}
+                                    onChange={handleInputChange}
+                                />
+                                <TextField
+                                    error={msgError?.includes('Longitud') ? validatedError : false}
+                                    helperText={msgError?.includes('Longitud') && msgError}
+                                    margin="dense"
+                                    id="lng"
+                                    name="lng"                
+                                    label="Longitud:"
+                                    type="number"  
+                                    variant="outlined"
+                                    placeholder="Agregar Longitud..."
+                                    autoComplete="off"
+                                    value={lng}
+                                    onChange={handleInputChange}
+                                />
+                                <TextField
+                                    error={msgError?.includes('Eje') ? validatedError : false}
+                                    helperText={msgError?.includes('Eje') && msgError}
+                                    margin="dense"
+                                    id="ejeZ"
+                                    name="ejeZ"
+                                    label="Eje Z:"                 
+                                    type="number" 
+                                    variant="outlined"
+                                    autoComplete="off"
+                                    placeholder="Agregar Eje Z..."
+                                    value={ejeZ}
+                                    onChange={handleInputChange}
+                                />
+                   
                     </Grid>
                     <Grid item md={2} lg={2} />
                     <Grid item xs={12} sm={12} md={5} lg={5} style={{display: 'flex', flexDirection: 'column'}}>
@@ -326,69 +368,17 @@ const AddModelScreen = ({history}) => {
                                 autoComplete="off"
                                 value={dateMonument}
                                 onChange={handleInputChange}
-                            />         
-                    </Grid>
-
-                    <Grid item xs={12} sm={12} md={5} lg={5} style={{display: 'flex', flexDirection:'column'}}>
+                            />  
                             <Typography>
-                                Localización del modelo:
-                            </Typography>
-                            <TextField
-                                    error={msgError?.includes('Latitud') ? validatedError : false}
-                                    helperText={msgError?.includes('Latitud') && msgError}
-                                    margin="dense"                            
-                                    id="lat"
-                                    name="lat"
-                                    label="Latitud:"
-                                    type="number"  
-                                    variant="outlined"
-                                    placeholder="Agregar Latitud..."
-                                    autoComplete="off"
-                                    value={lat}
-                                    onChange={handleInputChange}
-                                />
-                                <TextField
-                                    error={msgError?.includes('Longitud') ? validatedError : false}
-                                    helperText={msgError?.includes('Longitud') && msgError}
-                                    margin="dense"
-                                    id="lng"
-                                    name="lng"                
-                                    label="Longitud:"
-                                    type="number"  
-                                    variant="outlined"
-                                    placeholder="Agregar Longitud..."
-                                    autoComplete="off"
-                                    value={lng}
-                                    onChange={handleInputChange}
-                                />
-                                <TextField
-                                    error={msgError?.includes('Eje') ? validatedError : false}
-                                    helperText={msgError?.includes('Eje') && msgError}
-                                    margin="dense"
-                                    id="ejeZ"
-                                    name="ejeZ"
-                                    label="Eje Z:"                 
-                                    type="number" 
-                                    variant="outlined"
-                                    autoComplete="off"
-                                    placeholder="Agregar Eje Z..."
-                                    value={ejeZ}
-                                    onChange={handleInputChange}
-                                />
-
-                    </Grid>
-                    <Grid item md={2} lg={2} />
-                    <Grid item xs={12} sm={12} md={5} lg={5} style={{display:'flex', flexDirection: 'column'}}>
-                                <Typography>
-                                Subir modelo 3D:
+                                Subir formato del modelo 3D:
                                 </Typography>
                                 <input
-                                        id="contained-button-file"
+                                        id="contained-button-fileFormat"
                                         type="file"   
                                         className={classes.inputImg}     
-                                        onChange={handleCapture}
+                                        onChange={handleFileFormat}
                                 />
-                                <label  style={{display:'flex'}} htmlFor="contained-button-file" > 
+                                <label  style={{display:'flex'}} htmlFor="contained-button-fileFormat" > 
                                     
                                     <Button
                                         type="button"
@@ -402,21 +392,25 @@ const AddModelScreen = ({history}) => {
                                         <CloudUploadIcon/>
                                     </Button>
                                     <TextField
-                                        error={msgError?.includes('Modelo') ? validatedError : false}
-                                        helperText={msgError?.includes('Modelo') && msgError}
+                                        error={msgError?.includes('FileFormat') ? validatedError : false}
+                                        helperText={msgError?.includes('FileFormat') && msgError}
                                         margin="dense"
-                                        id="fileModel"
+                                        id="fileFormat"
                                         type="text" 
                                         variant="outlined" 
                                         style={{width: '100%'}}
                                         required
-                                        value={selectedFile ? selectedFile.name : ''}
+                                        value={selectedFileFormat ? selectedFileFormat.name : ''}
                                         placeholder="Seleccione un modelo..."
                                         InputProps={{
                                             readOnly: true,
                                         }}
                                     />    
-                                </label> 
+                                </label>        
+                    </Grid>
+                    <Grid item md={2} lg={2} />
+                    <Grid item xs={12} sm={12} md={6} lg={6} style={{display:'flex', flexDirection: 'column'}}>
+                                
                                 <Button
                                         type="submit"
                                         variant="contained"
@@ -433,7 +427,7 @@ const AddModelScreen = ({history}) => {
                                 </Button>      
                     </Grid>
                 </Grid>  
-            </form>   
+    </form>   
         </div>
     );
 }

@@ -101,20 +101,12 @@ const ModalShowMore = () => {
                             Modelo 3D: {model ?`${model.model.obj ? model.model.obj : '"Representación visual del modelo"'}` : '"Representación visual del modelo"'}
                           </Typography>
                         </div>
-                        <div style={{display: 'flex'}}> 
-                          <Brightness4Icon/>
-                          <Typography 
-                            variant="h6"
-                          >
-                              Sombras: {model ? `${model.model.shadow ? model.model.shadow : '"Las sombras que el modelo utiliza"'}`  : '"Las sombras que el modelo utiliza"'}
-                          </Typography>
-                        </div>
                         <div style={{display: 'flex'}}>  
                           <TextureIcon/>
                           <Typography 
                             variant="h6"
                           >
-                            Texturas: {model ? `${model.model.texture ? model.model.texture : '"Texturas para mayor calidad del modelo"'}` : '"Texturas para mayor calidad del modelo"'}
+                            File Format: {model ? `${model.model.fileFormat ? model.model.fileFormat : '"File Format para mayor calidad del modelo"'}` : '"File Format para mayor calidad del modelo"'}
                           </Typography>
                         </div>
                         <div style={{display: 'flex'}}>  
@@ -122,7 +114,7 @@ const ModalShowMore = () => {
                           <Typography 
                             variant="h6"
                           >
-                            Descreción Historica: {model ? `${model.data.description  ? model.data.description : '"La Descrioción"'}`  : '"La Descrioción"'}
+                            Descreción Historica: {model ? `${model.data.description  ? model.data.description : '"La Descrioción"'}`  : '"La Descripción"'}
                           </Typography>
                         </div>
                         <div style={{display: 'flex'}}>  

@@ -28,8 +28,6 @@ router.post(
     '/new', validarJWT, validarRole, [
         check('name', 'El nombre es obligatorio').not().isEmpty(),
         check('fileModel', 'El fileModel es obligatorio').not().isEmpty(),
-        check('texture', 'El texture es obligatorio').not().isEmpty(),
-        check('shadow', 'El shadow es obligatorio').not().isEmpty(),
         validarCampos
     ],
     crearModelo

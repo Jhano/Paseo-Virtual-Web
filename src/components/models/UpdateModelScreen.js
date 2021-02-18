@@ -11,7 +11,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
 
-import { removeError, selectedFileModel, setError } from '../../actions/ui';
+import { removeError, selectedFileModel, selectedFileModelFormat, setError } from '../../actions/ui';
 import { useForm } from '../../hooks/useForm';
 import { startFindModel, startUpdateModel } from '../../actions/model';
 import { useParams } from 'react-router-dom';
@@ -58,13 +58,11 @@ const UpdateModelScreen = ({history}) => {
     }, [dispatch, modelId]);
 
 
-    const {loading, selectedFile, validatedError, msgError} = useSelector(state => state.ui);
+    const {loading, selectedFile, selectedFileFormat, validatedError, msgError} = useSelector(state => state.ui);
     const {modelFind} = useSelector(state => state.model);
 
     const [formValues, handleInputChange, reset] = useForm({
         name: '',
-        texture: '',
-        shadow: '',
         description: '',
         extraInfo: '',
         lat: '',
@@ -75,14 +73,24 @@ const UpdateModelScreen = ({history}) => {
 
 
 
-    const { name, texture, shadow, description, extraInfo, lat, lng, ejeZ, dateMonument } = formValues;
+    const { name, description, extraInfo, lat, lng, ejeZ, dateMonument } = formValues;
 
-    const handleCapture = ({ target }) => {
+    const handleFileModel = ({ target }) => {
         const file = target.files[0]
         if(file){
             dispatch(selectedFileModel(file));
         }else{
             dispatch(selectedFileModel(''));
+        }
+        
+    };
+
+    const handleFileFormat = ({ target }) => {
+        const fileFormat = target.files[0]
+        if(fileFormat){
+            dispatch(selectedFileModelFormat(fileFormat));
+        }else{
+            dispatch(selectedFileModelFormat(''));
         }
         
     };
@@ -95,21 +103,12 @@ const UpdateModelScreen = ({history}) => {
         e.preventDefault();
         if(isFormValid()){
             dispatch(startUpdateModel(modelId,{
-                name,
-                texture,
-                shadow,
-                description,
-                extraInfo,
-                lat,
-                lng,
-                ejeZ,
-                dateMonument,
+                ...formValues,
                 fileModel: selectedFile.name ? selectedFile.name : '',
-            }, selectedFile));
+                fileFormat: selectedFileFormat.name ? selectedFileFormat.name : ''
+            }, selectedFile, selectedFileFormat));
             reset({
                 name: '',
-                texture: '',
-                shadow: '',
                 description: '',
                 extraInfo: '',
                 lat: '',
@@ -118,23 +117,12 @@ const UpdateModelScreen = ({history}) => {
                 dateMonument: '',
             });
             document.getElementById("contained-button-file").value= '';
+            document.getElementById("contained-button-fileFormat").value= '';
         }
     }
     const isFormValid = () => {
 
-        const copyData = {
-            name,
-            texture,
-            shadow,
-            description,
-            extraInfo,
-            lat,
-            lng,
-            ejeZ,
-            dateMonument,
-        }
-
-     
+        const copyData = formValues;
 
         for (const object in copyData) {
             if (validator.isEmpty(copyData[object])) {
@@ -142,25 +130,13 @@ const UpdateModelScreen = ({history}) => {
             }
         }
 
-        if(Object.keys(copyData).length === 0 && selectedFile === ''){
+        if(Object.keys(copyData).length === 0 && selectedFile === '' && selectedFileFormat === ''){
             return false
         }
         
         if(!validator.isEmpty(name)){
             if(name.length <= 2){ 
               dispatch(setError('Nombre no válido'));
-              return false;
-            }
-        }
-        if(!validator.isEmpty(texture)){
-            if(texture.length <= 2){ 
-              dispatch(setError('Textura no válida'));
-              return false;
-            }
-        }
-        if(!validator.isEmpty(shadow)){
-            if(shadow.length <= 2){ 
-              dispatch(setError('Sombra no válida'));
               return false;
             }
         }
@@ -205,8 +181,19 @@ const UpdateModelScreen = ({history}) => {
             const extension = fileName.split('.');
 
             const extensionValida = extension[1];
-            if(extensionValida !== 'obj' && extensionValida !== 'sfb'){
-              dispatch(setError('Modelo, la extensión debe ser .obj o .sfb'));
+            if(extensionValida !== 'bin'){
+              dispatch(setError('Modelo, la extensión debe ser .bin'));
+              return false;
+            }
+        }
+
+        if( selectedFileFormat !== ''){
+            const fileName = selectedFileFormat.name;
+            const extension = fileName.split('.');
+
+            const extensionValida = extension[1];
+            if(extensionValida !== 'gltf'){
+              dispatch(setError('FileFormat, la extensión debe ser .gltf'));
               return false;
             }
         }
@@ -255,39 +242,87 @@ const UpdateModelScreen = ({history}) => {
                                 onChange={handleInputChange}
                             />
                             <Typography>
-                                Texturas del modelo*:
+                                Subir modelo 3D*:
                             </Typography>
-                            <TextField
-                                error={msgError?.includes('Textura') ? validatedError : false}
-                                helperText={msgError?.includes('Textura') && msgError}
-                                margin="dense"
-                                id="texture"
-                                name="texture"
-                                type="text" 
-                                variant="outlined" 
-                                placeholder={modelFind ? `${modelFind.model.texture ? modelFind.model.texture : 'Subir texturas'}...` : 'Subir texturas...'}
-                                autoComplete="off"
-                                value={texture}
-                                onChange={handleInputChange}
-                            /> 
+                                <input
+                                        id="contained-button-file"
+                                        type="file"   
+                                        className={classes.inputImg}     
+                                        onChange={handleFileModel}
+                                />
+                                <label  style={{display:'flex'}} htmlFor="contained-button-file" > 
+                                    
+                                    <Button
+                                        type="button"
+                                        variant="contained"
+                                        color="secondary"
+                                        component="span"
+                                        className={classes.upload}
+                                        aria-label="Upload Image" 
+                                        disabled={loading}
+                                    >
+                                        <CloudUploadIcon/>
+                                    </Button>
+                                    <TextField
+                                        error={msgError?.includes('Modelo') ? validatedError : false}
+                                        helperText={msgError?.includes('Modelo') && msgError}
+                                        margin="dense"
+                                        id="fileModel"
+                                        type="text" 
+                                        variant="outlined" 
+                                        style={{width: '100%'}}
+                                        value={selectedFile ? selectedFile.name : ''}
+                                        placeholder={modelFind ? `${modelFind.fileModel ? modelFind.fileModel  : 'Subir Archivo del modelo'}...` : 'Subir Archivo del modelo...'}
+                                        InputProps={{
+                                            readOnly: true,
+                                        }}
+                                    />    
+                                </label> 
                             <Typography>
-                                Sombras del modelo*:
+                                Localización del modelo:
                             </Typography>
                             <TextField
-                                error={msgError?.includes('Sombra') ? validatedError : false}
-                                helperText={msgError?.includes('Sombra') && msgError}
-                                margin="dense"
-                                id="shadow"
-                                name="shadow"
-                                type="text"
-                                placeholder={modelFind ? `${modelFind.model.shadow ? modelFind.model.shadow : 'Subir sombras'}...` : 'Subir sombras...'}
-                                variant="outlined"
-                                autoComplete="off"
-                                value={shadow}
-                                onChange={handleInputChange}
-                            />
-
-                                
+                                    error={msgError?.includes('Latitud') ? validatedError : false}
+                                    helperText={msgError?.includes('Latitud') && msgError}
+                                    margin="dense"                            
+                                    id="lat"
+                                    name="lat"
+                                    label="Latitud:"
+                                    type="number"  
+                                    variant="outlined"
+                                    placeholder={modelFind ? `${modelFind.location.lat ? modelFind.location.lat : 'Subir latitud'}...` : 'Subir latitud...'}
+                                    autoComplete="off"
+                                    value={lat}
+                                    onChange={handleInputChange}
+                                />
+                                <TextField
+                                    error={msgError?.includes('Longitud') ? validatedError : false}
+                                    helperText={msgError?.includes('Longitud') && msgError}
+                                    margin="dense"
+                                    id="lng"
+                                    name="lng"                
+                                    label="Longitud:"
+                                    type="number"  
+                                    variant="outlined"
+                                    placeholder={modelFind ? `${modelFind.location.lng ? modelFind.location.lng : 'Subir longitud'}...` : 'Subir longitud...'}
+                                    autoComplete="off"
+                                    value={lng}
+                                    onChange={handleInputChange}
+                                />
+                                <TextField
+                                    error={msgError?.includes('Eje') ? validatedError : false}
+                                    helperText={msgError?.includes('Eje') && msgError}
+                                    margin="dense"
+                                    id="ejeZ"
+                                    name="ejeZ"
+                                    label="Eje Z:"                 
+                                    type="number" 
+                                    variant="outlined"
+                                    autoComplete="off"
+                                    placeholder={modelFind ? `${modelFind.location.ejeZ ? modelFind.location.ejeZ  : 'Subir eje z'}...` : 'Subir eje z...'}
+                                    value={ejeZ}
+                                    onChange={handleInputChange}
+                                />
                     </Grid>
                     <Grid item md={2} lg={2} />
                     <Grid item xs={12} sm={12} md={5} lg={5} style={{display: 'flex', flexDirection: 'column'}}>
@@ -337,69 +372,17 @@ const UpdateModelScreen = ({history}) => {
                                 autoComplete="off"
                                 value={dateMonument}
                                 onChange={handleInputChange}
-                            />         
-                    </Grid>
-
-                    <Grid item xs={12} sm={12} md={5} lg={5} style={{display: 'flex', flexDirection:'column'}}>
-                            <Typography>
-                                Localización del modelo:
-                            </Typography>
-                            <TextField
-                                    error={msgError?.includes('Latitud') ? validatedError : false}
-                                    helperText={msgError?.includes('Latitud') && msgError}
-                                    margin="dense"                            
-                                    id="lat"
-                                    name="lat"
-                                    label="Latitud:"
-                                    type="number"  
-                                    variant="outlined"
-                                    placeholder={modelFind ? `${modelFind.location.lat ? modelFind.location.lat : 'Subir latitud'}...` : 'Subir latitud...'}
-                                    autoComplete="off"
-                                    value={lat}
-                                    onChange={handleInputChange}
-                                />
-                                <TextField
-                                    error={msgError?.includes('Longitud') ? validatedError : false}
-                                    helperText={msgError?.includes('Longitud') && msgError}
-                                    margin="dense"
-                                    id="lng"
-                                    name="lng"                
-                                    label="Longitud:"
-                                    type="number"  
-                                    variant="outlined"
-                                    placeholder={modelFind ? `${modelFind.location.lng ? modelFind.location.lng : 'Subir longitud'}...` : 'Subir longitud...'}
-                                    autoComplete="off"
-                                    value={lng}
-                                    onChange={handleInputChange}
-                                />
-                                <TextField
-                                    error={msgError?.includes('Eje') ? validatedError : false}
-                                    helperText={msgError?.includes('Eje') && msgError}
-                                    margin="dense"
-                                    id="ejeZ"
-                                    name="ejeZ"
-                                    label="Eje Z:"                 
-                                    type="number" 
-                                    variant="outlined"
-                                    autoComplete="off"
-                                    placeholder={modelFind ? `${modelFind.location.ejeZ ? modelFind.location.ejeZ  : 'Subir eje z'}...` : 'Subir eje z...'}
-                                    value={ejeZ}
-                                    onChange={handleInputChange}
-                                />
-
-                    </Grid>
-                    <Grid item md={2} lg={2} />
-                    <Grid item xs={12} sm={12} md={5} lg={5} style={{display:'flex', flexDirection: 'column'}}>
-                                <Typography>
-                                Subir modelo 3D*:
+                            />      
+                             <Typography>
+                                Subir formato del modelo 3D:
                                 </Typography>
                                 <input
-                                        id="contained-button-file"
+                                        id="contained-button-fileFormat"
                                         type="file"   
                                         className={classes.inputImg}     
-                                        onChange={handleCapture}
+                                        onChange={handleFileFormat}
                                 />
-                                <label  style={{display:'flex'}} htmlFor="contained-button-file" > 
+                                <label  style={{display:'flex'}} htmlFor="contained-button-fileFormat" > 
                                     
                                     <Button
                                         type="button"
@@ -413,20 +396,24 @@ const UpdateModelScreen = ({history}) => {
                                         <CloudUploadIcon/>
                                     </Button>
                                     <TextField
-                                        error={msgError?.includes('Modelo') ? validatedError : false}
-                                        helperText={msgError?.includes('Modelo') && msgError}
+                                        error={msgError?.includes('FileFormat') ? validatedError : false}
+                                        helperText={msgError?.includes('FileFormat') && msgError}
                                         margin="dense"
-                                        id="fileModel"
+                                        id="fileFormat"
                                         type="text" 
                                         variant="outlined" 
                                         style={{width: '100%'}}
-                                        value={selectedFile ? selectedFile.name : ''}
-                                        placeholder={modelFind ? `${modelFind.fileModel ? modelFind.fileModel  : 'Subir Archivo del modelo'}...` : 'Subir Archivo del modelo...'}
+                                        value={selectedFileFormat ? selectedFileFormat.name : ''}
+                                        placeholder={modelFind ? `${modelFind.fileFormat ? modelFind.fileFormat : 'Subir formato del archivo del modelo'}...` : 'Subir formato del archivo del modelo...'}
                                         InputProps={{
                                             readOnly: true,
                                         }}
                                     />    
-                                </label> 
+                                </label>    
+                    </Grid>
+                    <Grid item md={2} lg={2} />
+                    <Grid item xs={12} sm={12} md={6} lg={6} style={{display:'flex', flexDirection: 'column'}}>
+                               
                                 <Button
                                         type="submit"
                                         variant="contained"

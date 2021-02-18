@@ -100,8 +100,7 @@ const obtenerModelo = async(req, res = response) => {
             },
             model: {
                 obj: modelo.fileModel,
-                texture: modelo.texture,
-                shadow: modelo.shadow
+                fileFormat: modelo.fileFormat,
             },
             data: {
                 name: modelo.name,
@@ -245,8 +244,7 @@ const objModels = (modelos) => {
         },
         model: {
             obj: modelo.fileModel,
-            texture: modelo.texture,
-            shadow: modelo.shadow
+            fileFormat: modelo.fileFormat,
         },
         data: {
             name: modelo.name,

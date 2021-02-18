@@ -42,7 +42,7 @@ const fileUsuario = async(id, res, nombreArchivo) => {
     }
 }
 
-const fileModelo = async(id, req, res, nombreArchivo) => {
+const fileModelo = async(id, req, res, nombreArchivo, extension) => {
 
     let role = req.role;
 
@@ -67,17 +67,20 @@ const fileModelo = async(id, req, res, nombreArchivo) => {
                 }
             })
         }
-
-        deleteFile(modelo.fileModel, 'modelo');
-
-        modelo.fileModel = nombreArchivo;
+        if (extension === 'bin') {
+            deleteFile(modelo.fileModel, 'modelo', extension);
+            modelo.fileModel = nombreArchivo;
+        } else {
+            deleteFile(modelo.fileFormat, 'modelo');
+            modelo.fileFormat = nombreArchivo;
+        }
 
         const modeloSave = await modelo.save();
 
         res.json({
             ok: true,
             modelo: modeloSave,
-            fileModel: nombreArchivo
+            upload: nombreArchivo
         })
 
 
@@ -90,9 +93,9 @@ const fileModelo = async(id, req, res, nombreArchivo) => {
     }
 }
 
-const deleteFile = (nombreImagen, tipo) => {
+const deleteFile = (nombreImagen, tipo, extension = 'gltf') => {
     let pathImage = path.resolve(__dirname, `../../public/uploads/${tipo}/${nombreImagen}`) //creando un path
-    if (fs.existsSync(pathImage)) {
+    if (fs.existsSync(pathImage && extension !== 'bin')) {
         fs.unlinkSync(pathImage);
     }
 }

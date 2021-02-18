@@ -6,6 +6,7 @@ const initialState = {
     search: false,
     showMore: false,
     file: null,
+    fileFormat: null,
     modelUpdate: {},
     //modelfind
 }
@@ -56,6 +57,12 @@ export const modelReducer = (state = initialState, action) => {
                 ...state,
                 modelUpdate: action.payload.model,
                 file: action.payload.file
+            }
+        case types.modelUploadFileFormat:
+            return {
+                ...state,
+                modelUpdate: action.payload.model,
+                fileFormat: action.payload.fileFormat
             }
         case types.modelFindById:
             return {

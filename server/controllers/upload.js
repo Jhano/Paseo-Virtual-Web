@@ -30,7 +30,7 @@ const uploadFile = async(req, res = response) => {
         let extension = nombreCortado[nombreCortado.length - 1];
 
 
-        let extensionesValidas = ['png', 'jpg', 'jpeg', 'obj', 'sfb'];
+        let extensionesValidas = ['png', 'jpg', 'jpeg', 'bin', 'gltf'];
 
         if (extensionesValidas.indexOf(extension) < 0) {
             error(res, err = {
@@ -40,7 +40,13 @@ const uploadFile = async(req, res = response) => {
         }
 
         //cambio nombre archivo
-        let nombreArchivo = `${id}-${new Date().getMilliseconds()}.${extension}`;
+        let nombreArchivo;
+        if (extension === 'bin') {
+            nombreArchivo = archivo.name;
+        } else {
+            nombreArchivo = `${id}-${new Date().getMilliseconds()}.${extension}`;
+        }
+
 
 
         await archivo.mv(`public/uploads/${tipo}/${nombreArchivo}`);
@@ -48,7 +54,7 @@ const uploadFile = async(req, res = response) => {
 
         switch (tipo) {
             case 'modelo':
-                fileModelo(id, req, res, nombreArchivo);
+                fileModelo(id, req, res, nombreArchivo, extension);
                 break;
 
             case 'usuario':

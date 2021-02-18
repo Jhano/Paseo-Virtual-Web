@@ -13,13 +13,9 @@ let modeloSchema = new Schema({
         type: String,
         required: [true, "El modelo 3D es necesario"]
     },
-    texture: {
+    fileFormat: {
         type: String,
-        required: [true, "Las texturas son necesarios"]
-    },
-    shadow: {
-        type: String,
-        required: [true, "Las sombras son  necesarios"]
+        required: false
     },
     usuarioId: {
         type: Schema.Types.ObjectId,

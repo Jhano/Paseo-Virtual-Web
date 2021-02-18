@@ -50,3 +50,8 @@ export const selectedFileModel = (file) => ({
     type: types.uiSelectedFile,
     payload: file
 });
+
+export const selectedFileModelFormat = (fileFormat) => ({
+    type: types.uiSelectedFileFormat,
+    payload: fileFormat
+});

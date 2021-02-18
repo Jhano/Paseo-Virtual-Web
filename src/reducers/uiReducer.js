@@ -12,7 +12,8 @@ const initialState = {
     rowsPerPageSearch: 5,
     showPassword: false,
     activeModal: false,
-    selectedFile: ''
+    selectedFile: '',
+    selectedFileFormat: '',
 
 }
 
@@ -100,6 +101,11 @@ export const uiReducer = (state = initialState, action) => {
             return {
                 ...state,
                 selectedFile: action.payload
+            }
+        case types.uiSelectedFileFormat:
+            return {
+                ...state,
+                selectedFileFormat: action.payload
             }
 
 

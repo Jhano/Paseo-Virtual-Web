@@ -22,6 +22,7 @@ export const types = {
     uiOpenModal: '[ui] Open modal',
     uiCloseModal: '[ui] Close modal',
     uiSelectedFile: '[ui] Selected file',
+    uiSelectedFileFormat: '[ui] Selected file Format',
 
     userStartGet: '[user] Start get usuario',
     userGet: '[user] Get usuarios',
@@ -46,6 +47,7 @@ export const types = {
     modelSearchOff: '[model] Search models off',
     modelStartUploadFile: '[model] Start upload file',
     modelUploadFile: '[model] Upload file',
+    modelUploadFileFormat: '[model] Upload fileFormat',
     modelClearModelFindModal: '[model] Clear modelFind modal',
 
     mapModelStartLoading: '[map] Model start loading',
