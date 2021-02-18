@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import GoogleMapReact from 'google-map-react';
 import { useDispatch, useSelector } from 'react-redux';
 
 
 import { startLoadingModels } from '../../actions/model';
+import {mapSelectLocation, mapShowComboBox } from '../../actions/map';
 import Marker from './Marker';
-import { mapStartUpdateModel, showAllModel, mapSelectModel } from '../../actions/map';
 import BarraMenu from './BarraMenu';
+import MarkerTemp from './MarkerTemp';
+import { Grid } from '@material-ui/core';
+import AddMarker from './AddMarker';
 
 
 const MapScreen = () => {
 
-    const [mlat, setLat] = useState(0);
-    const [mlng, setLng] = useState(0);
 
     const dispatch = useDispatch();
-    const {selectModel} = useSelector(state => state.map)
-    const {mId} = selectModel;
+    const {selectLocation, showComboBox} = useSelector(state => state.map)
+    const {lat, lng} = selectLocation;
 
     useEffect(() => {
         dispatch(startLoadingModels());
@@ -24,28 +25,13 @@ const MapScreen = () => {
 
     const {models} = useSelector(state => state.model);
 
-    const handleInfo = (mid, name) => {
-        dispatch(mapSelectModel(mid, name));
-    }
-
-    const handleAllName = () => {    
-        dispatch(mapSelectModel());
-        dispatch(showAllModel());          
-    }
-
-    const handleDeleteLocation = () => {
-        dispatch(mapStartUpdateModel(mId, {lat: 0, lng: 0}));
-        dispatch(mapSelectModel());
-    }
-
-    const handleAddMarker = ({ x, y, lat, lng, event }) => {
-        console.log(x, y, lat, lng, event );
-        setLat(lat);
-        setLng(lng);
+    const handleAddMarker = ({lat: mlat, lng: mlng}) => {
+        dispatch(mapShowComboBox(true));
+        dispatch(mapSelectLocation(mlat, mlng));
     };
 
     const handleApiLoaded = (map, maps) => {
-        console.log(map, maps)
+        //console.log(map, maps)
     } 
 
     const getMapOptions = (maps) => ({
@@ -53,16 +39,32 @@ const MapScreen = () => {
           mapTypeControl: true,
           streetViewControl: true,
           styles: [{ featureType: 'poi', elementType: 'labels', stylers: [{ visibility: 'on' }] }],
-          gestureHandlin: 'none',
+          disableDoubleClickZoom: true,
       });
 
 
     return (     
-        <div style={{display: 'flex', flexDirection: 'column',height: '80vh', width:'100%', }}>
-            <BarraMenu 
-                handleAllName={handleAllName}
-                handleDeleteLocation={handleDeleteLocation}
-            />
+        <div style={{display: 'flex', flexDirection: 'column',height: '80vh', width:'100%', }}>        
+                {
+                    showComboBox ? 
+                     <div style={{display: 'flex'}}>
+                        <Grid item
+                            xs={6} sm={6} md={6} lg={6} xl={6}
+                        >
+                            <AddMarker/>
+                        </Grid>
+                        <Grid item
+                            xs={6} sm={6} md={6} lg={6} xl={6}
+                        >
+                            <BarraMenu />
+                        </Grid>
+                    </div>  
+                    : <BarraMenu />
+                   
+                }
+                
+            
+            
             <GoogleMapReact
                 bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE }}
                 defaultZoom={10}
@@ -77,23 +79,23 @@ const MapScreen = () => {
                             (model.location.lat !== 0 || model.location.lng !== 0 )
                                 &&
                                     <Marker
-                                        onClick={handleInfo}
                                         key={model.id}
                                         mId={model.id}
                                         name={model.data.name}
                                         lat={model.location.lat}
                                         lng={model.location.lng}
                                     />                           
-                            ))                  
-                }  
-                
-                    {/* <div style={{height: '18px', width:'18px', backgroundColor:'black', transform: 'translate(-50%, -50%)', borderRadius:'100%', border:'2px solid white' }}
-                        lat={mlat}
-                        lng={mlng}
-                    >
-
-                    </div> */}
-                      
+                            ))                
+                } 
+                {
+                    (lat !== 0 || lng !== 0 ) 
+                    &&
+                    <MarkerTemp 
+                        lat={lat}
+                        lng={lng}
+                    />
+                } 
+           
             </GoogleMapReact>
         </div>   
     )

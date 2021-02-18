@@ -13,7 +13,7 @@ export const mapStartUpdateModel = (mid, location) => {
         if (data.ok) {
             dispatch(mapUpdateModel(data.modelo));
             dispatch(startLoadingModels());
-            Swal.fire('Success', 'Marcador eliminado');
+            Swal.fire('Success', 'Marcador actualizado');
         } else {
             Swal.fire('No se ha eliminar el marcador', data.err, 'error');
             console.log(data.err)
@@ -34,4 +34,17 @@ export const mapSelectModel = (mId = '', modelName = '') => ({
         mId,
         modelName
     }
+});
+
+export const mapSelectLocation = (lat, lng) => ({
+    type: types.mapSelectLocation,
+    payload: {
+        lat,
+        lng
+    }
+});
+
+export const mapShowComboBox = (flag) => ({
+    type: types.mapShowComboBox,
+    payload: flag
 });

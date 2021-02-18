@@ -54,4 +54,6 @@ export const types = {
     mapModelUpdate: '[map] Model update',
     mapShowModelAll: '[map] Show model all',
     mapSelectModel: '[map] Select Model',
+    mapSelectLocation: '[map] Select Location',
+    mapShowComboBox: '[map] Show combo box',
 }

@@ -7,7 +7,12 @@ const initialState = {
         mId: '',
         modelName: ''
     },
-    visible: false
+    visible: false,
+    selectLocation: {
+        lat: 0,
+        lng: 0
+    },
+    showComboBox: false,
 }
 
 export const mapReducer = (state = initialState, action) => {
@@ -30,6 +35,20 @@ export const mapReducer = (state = initialState, action) => {
             return {
                 ...state,
                 visible: !state.visible
+            }
+
+        case types.mapSelectLocation:
+            return {
+                ...state,
+                selectLocation: {
+                    lat: action.payload.lat,
+                    lng: action.payload.lng
+                }
+            }
+        case types.mapShowComboBox:
+            return {
+                ...state,
+                showComboBox: action.payload
             }
 
         default:

@@ -3,7 +3,8 @@ import { Grid, IconButton, Typography } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles } from '@material-ui/core/styles';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { mapSelectModel, mapStartUpdateModel, showAllModel} from '../../actions/map';
 
 
 const useStyles = makeStyles(() => ({
@@ -14,16 +15,27 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const BarraMenu = ({ handleAllName, handleDeleteLocation }) => {
+const BarraMenu = () => {
     const classes = useStyles();
+    const dispatch = useDispatch();
 
     const {selectModel, visible} = useSelector(state => state.map);
-    const {modelName} = selectModel;
+    const {mId , modelName} = selectModel;
+
+    const handleAllName = () => {    
+        dispatch(mapSelectModel());
+        dispatch(showAllModel());          
+    }
+
+    const handleDeleteLocation = () => {
+        dispatch(mapStartUpdateModel(mId, {lat: 0, lng: 0}));
+        dispatch(mapSelectModel());
+    }
     return (
-        <div style={{display:'flex', justifyContent:'center', marginBottom: '15px'}}>
+        <div style={{display:'flex', justifyContent:'center', marginBottom: '25px'}}>
                 <Grid xs={3} sm={3} md={3} lg={3} xl={3} item style={{display: 'flex', justifyContent:'flex-end'}}>
                     <IconButton
-                            aria-label="toggle password visibility"
+                            aria-label="toggle visibility"
                             onClick={handleAllName}
                             >
                             { visible ? <Visibility/> : <VisibilityOff /> }

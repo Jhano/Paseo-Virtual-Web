@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import RoomIcon from '@material-ui/icons/Room';
 import { IconButton, Typography } from '@material-ui/core';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { mapSelectModel } from '../../actions/map';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -13,16 +14,20 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const Marker = ({ name, onClick, mId }) => {
+const Marker = ({ name, mId }) => {
     const classes = useStyles();
+    const dispatch = useDispatch();
 
     const {visible} = useSelector(state => state.map)
     
+    const handleInfo = (mid, mName) => {
+        dispatch(mapSelectModel(mid, mName));
+    }
 
     return (
         <div style={{position: 'absolute'}}>
             <IconButton
-                onClick={() => onClick(mId, name)}
+                onClick={() => handleInfo(mId, name)}
             >
             
                 <RoomIcon fontSize="large"  className={classes.root}/>  
@@ -35,15 +40,6 @@ const Marker = ({ name, onClick, mId }) => {
         
     )
      
-};
-
-Marker.defaultProps = {
-  onClick: null,
-};
-
-Marker.propTypes = {
-  onClick: PropTypes.func,
-  name: PropTypes.string.isRequired,
 };
 
 export default Marker;
