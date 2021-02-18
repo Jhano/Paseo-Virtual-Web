@@ -247,7 +247,7 @@ const UpdateModelScreen = ({history}) => {
                                 margin="dense"
                                 id="name"
                                 name="name"             
-                                placeholder={modelFind ? `${modelFind.name ? modelFind.name : 'Subir nombre'}...` : 'Subir nombre...'}
+                                placeholder={modelFind ? `${modelFind.data.name ? modelFind.data.name : 'Subir nombre'}...` : 'Subir nombre...'}
                                 type="text"
                                 variant="outlined"
                                 autoComplete="off"
@@ -265,7 +265,7 @@ const UpdateModelScreen = ({history}) => {
                                 name="texture"
                                 type="text" 
                                 variant="outlined" 
-                                placeholder={modelFind ? `${modelFind.texture ? modelFind.texture : 'Subir texturas'}...` : 'Subir texturas...'}
+                                placeholder={modelFind ? `${modelFind.model.texture ? modelFind.model.texture : 'Subir texturas'}...` : 'Subir texturas...'}
                                 autoComplete="off"
                                 value={texture}
                                 onChange={handleInputChange}
@@ -280,7 +280,7 @@ const UpdateModelScreen = ({history}) => {
                                 id="shadow"
                                 name="shadow"
                                 type="text"
-                                placeholder={modelFind ? `${modelFind.shadow}...` : 'Subir sombras...'}
+                                placeholder={modelFind ? `${modelFind.model.shadow ? modelFind.model.shadow : 'Subir sombras'}...` : 'Subir sombras...'}
                                 variant="outlined"
                                 autoComplete="off"
                                 value={shadow}
@@ -300,7 +300,7 @@ const UpdateModelScreen = ({history}) => {
                                 margin="dense"
                                 id="description"
                                 name="description"
-                                placeholder={modelFind ? `${modelFind.description ? modelFind.description : 'Subir descripcion'}...` : 'Subir descripcion...'}
+                                placeholder={modelFind ? `${modelFind.data.description ? modelFind.data.description : 'Subir descripcion'}...` : 'Subir descripcion...'}
                                 type="text"  
                                 variant="outlined"
                                 autoComplete="off"
@@ -316,7 +316,7 @@ const UpdateModelScreen = ({history}) => {
                                 margin="dense"
                                 id="extraInfo"
                                 name="extraInfo"
-                                placeholder={modelFind ? `${modelFind.extraInfo ? modelFind.extraInfo : 'Subir información Extra'}...` : 'Subir información Extra...'}
+                                placeholder={modelFind ? `${modelFind.data.extraInfo ? modelFind.data.extraInfo : 'Subir información Extra'}...` : 'Subir información Extra...'}
                                 type="text"  
                                 variant="outlined"
                                 autoComplete="off"
@@ -353,7 +353,7 @@ const UpdateModelScreen = ({history}) => {
                                     label="Latitud:"
                                     type="number"  
                                     variant="outlined"
-                                    placeholder={modelFind ? `${modelFind.lat ? modelFind.lat : 'Subir latitud'}...` : 'Subir latitud...'}
+                                    placeholder={modelFind ? `${modelFind.location.lat ? modelFind.location.lat : 'Subir latitud'}...` : 'Subir latitud...'}
                                     autoComplete="off"
                                     value={lat}
                                     onChange={handleInputChange}
@@ -367,7 +367,7 @@ const UpdateModelScreen = ({history}) => {
                                     label="Longitud:"
                                     type="number"  
                                     variant="outlined"
-                                    placeholder={modelFind ? `${modelFind.lng ? modelFind.lng : 'Subir longitud'}...` : 'Subir longitud...'}
+                                    placeholder={modelFind ? `${modelFind.location.lng ? modelFind.location.lng : 'Subir longitud'}...` : 'Subir longitud...'}
                                     autoComplete="off"
                                     value={lng}
                                     onChange={handleInputChange}
@@ -382,7 +382,7 @@ const UpdateModelScreen = ({history}) => {
                                     type="number" 
                                     variant="outlined"
                                     autoComplete="off"
-                                    placeholder={modelFind ? `${modelFind.ejeZ ? modelFind.ejeZ  : 'Subir eje z'}...` : 'Subir eje z...'}
+                                    placeholder={modelFind ? `${modelFind.location.ejeZ ? modelFind.location.ejeZ  : 'Subir eje z'}...` : 'Subir eje z...'}
                                     value={ejeZ}
                                     onChange={handleInputChange}
                                 />
