@@ -21,13 +21,12 @@ const sendEmail = async(email, token, res) => {
             to: email,
             subject: 'Confirmación de registro',
             text: 'Por favor presionar en el siguiente link para confirmar registro:',
-            html: `<a href='http://60122a8d95e9.ngrok.io/api/emails/${token}'>Confirmar...</a>`,
+            html: `<a href='https://af44d8fb70dc.ngrok.io/api/emails/${token}'>Confirmar...</a>`,
         };
         // Enviamos el email
         const correoEnviado = await transporter.sendMail(mailOptions);
 
         if (correoEnviado) {
-            console.log("HOLAA");
             return true;
         } else {
             res.status(500).json({
