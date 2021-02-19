@@ -169,7 +169,7 @@ export const startUploadFileModel = (id, file) => {
         const data = await resp.json();
 
         if (data.ok) {
-            extension === 'bin' ? dispatch(uploadFileModel(data.modelo, data.upload)) : dispatch(uploadFileModelFormat(data.modelo, data.upload));
+            extension === 'gltf' ? dispatch(uploadFileModel(data.modelo, data.upload)) : dispatch(uploadFileModelFormat(data.modelo, data.upload));
             dispatch(finishLoading());
             dispatch(selectedFileModel(''));
             dispatch(selectedFileModelFormat(''));

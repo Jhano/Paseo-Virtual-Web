@@ -161,13 +161,13 @@ const AddModelScreen = ({history}) => {
             const extension = fileName.split('.');
 
             const extensionValida = extension[1];
-            if(extensionValida !== 'bin'){
-              dispatch(setError('Modelo, la extensión debe ser .bin'));
+            if(extensionValida !== 'gltf'){
+              dispatch(setError('Modelo, la extensión debe ser .gltf'));
               return false;
             }
         }
         if(selectedFile === ''){
-            dispatch(setError('Modelo, file modelo 3D es necesario'));
+            dispatch(setError('Modelo, Archivo .gltf es necesario'));
             return false;           
         }
         if( selectedFileFormat !== ''){
@@ -175,8 +175,8 @@ const AddModelScreen = ({history}) => {
             const extension = fileName.split('.');
 
             const extensionValida = extension[1];
-            if(extensionValida !== 'gltf'){
-              dispatch(setError('FileFormat, la extensión del archivo del modelo debe ser .gltf'));
+            if(extensionValida !== 'bin'){
+              dispatch(setError('FileFormat, la extensión del archivo del modelo debe ser .bin'));
               return false;
             }
         }
@@ -209,7 +209,7 @@ const AddModelScreen = ({history}) => {
             <Typography>
                     Para no tener problemas al agregar un modelo, es necesario llenar las casillas de:
                     <li>Nombre del modelo.</li>
-                    <li>Modelo 3D.</li>
+                    <li>Archivo .gltf</li>
             </Typography>
             <form onSubmit={handleSubmit}>
                 <Grid container style={{display: 'flex', marginTop:'10px'}}>              
@@ -233,7 +233,7 @@ const AddModelScreen = ({history}) => {
                                 onChange={handleInputChange}
                             />
                             <Typography>
-                                Subir modelo 3D:
+                                Subir Archivo .gltf:
                                 </Typography>
                                 <input
                                         id="contained-button-file"
@@ -370,7 +370,7 @@ const AddModelScreen = ({history}) => {
                                 onChange={handleInputChange}
                             />  
                             <Typography>
-                                Subir formato del modelo 3D:
+                                Subir Archivo .bin:
                                 </Typography>
                                 <input
                                         id="contained-button-fileFormat"

@@ -181,8 +181,8 @@ const UpdateModelScreen = ({history}) => {
             const extension = fileName.split('.');
 
             const extensionValida = extension[1];
-            if(extensionValida !== 'bin'){
-              dispatch(setError('Modelo, la extensión debe ser .bin'));
+            if(extensionValida !== 'gltf'){
+              dispatch(setError('Modelo, la extensión debe ser .gltf'));
               return false;
             }
         }
@@ -192,8 +192,8 @@ const UpdateModelScreen = ({history}) => {
             const extension = fileName.split('.');
 
             const extensionValida = extension[1];
-            if(extensionValida !== 'gltf'){
-              dispatch(setError('FileFormat, la extensión debe ser .gltf'));
+            if(extensionValida !== 'bin'){
+              dispatch(setError('FileFormat, la extensión debe ser .bin'));
               return false;
             }
         }
@@ -242,7 +242,7 @@ const UpdateModelScreen = ({history}) => {
                                 onChange={handleInputChange}
                             />
                             <Typography>
-                                Subir modelo 3D*:
+                                Subir Archivo .gltf*:
                             </Typography>
                                 <input
                                         id="contained-button-file"
@@ -272,7 +272,7 @@ const UpdateModelScreen = ({history}) => {
                                         variant="outlined" 
                                         style={{width: '100%'}}
                                         value={selectedFile ? selectedFile.name : ''}
-                                        placeholder={modelFind ? `${modelFind.fileModel ? modelFind.fileModel  : 'Subir Archivo del modelo'}...` : 'Subir Archivo del modelo...'}
+                                        placeholder={modelFind ? `${modelFind.model.obj ? modelFind.model.obj  : 'Subir Archivo del modelo .gltf'}...` : 'Subir Archivo del modelo.gltf...'}
                                         InputProps={{
                                             readOnly: true,
                                         }}
@@ -374,7 +374,7 @@ const UpdateModelScreen = ({history}) => {
                                 onChange={handleInputChange}
                             />      
                              <Typography>
-                                Subir formato del modelo 3D:
+                                Subir Archivo .bin:
                                 </Typography>
                                 <input
                                         id="contained-button-fileFormat"
@@ -404,7 +404,7 @@ const UpdateModelScreen = ({history}) => {
                                         variant="outlined" 
                                         style={{width: '100%'}}
                                         value={selectedFileFormat ? selectedFileFormat.name : ''}
-                                        placeholder={modelFind ? `${modelFind.fileFormat ? modelFind.fileFormat : 'Subir formato del archivo del modelo'}...` : 'Subir formato del archivo del modelo...'}
+                                        placeholder={modelFind ? `${modelFind.model.fileFormat ? modelFind.model.fileFormat : 'Subir Archivo .bin'}...` : 'Subir Archivo .bin...'}
                                         InputProps={{
                                             readOnly: true,
                                         }}

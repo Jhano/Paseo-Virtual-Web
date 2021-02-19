@@ -69,10 +69,10 @@ const fileModelo = async(id, req, res, nombreArchivo, extension) => {
         }
         if (extension === 'bin') {
             deleteFile(modelo.fileModel, 'modelo', extension);
-            modelo.fileModel = nombreArchivo;
+            modelo.fileFormat = nombreArchivo;
         } else {
             deleteFile(modelo.fileFormat, 'modelo');
-            modelo.fileFormat = nombreArchivo;
+            modelo.fileModel = nombreArchivo;
         }
 
         const modeloSave = await modelo.save();

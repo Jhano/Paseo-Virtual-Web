@@ -84,7 +84,12 @@ const ModalShowMore = () => {
                   {
                     <div className={classes.modal}>
                       <MuiDialogTitle disableTypography className={classes.root}>
-                          <Typography variant="h6">Modelo: {model ? `${model.data.name ? model.data.name : '"Nombre"'}` : '"Nombre"'}</Typography>
+                          <Typography 
+                            variant="h6"
+                            component="span"
+                          >
+                            Modelo: {model ? `${model.data.name ? model.data.name : '"Nombre"'}` : '"Nombre"'}
+                          </Typography>
                           <IconButton aria-label="close" className={classes.closeButton} onClick={handleClose}>
                               <CloseIcon />
                           </IconButton> 
@@ -96,30 +101,34 @@ const ModalShowMore = () => {
                           <LocationCityIcon/>
                           <Typography 
                             variant="h6"
+                            component="span"
                           >
-                            Modelo 3D: {model ?`${model.model.obj ? model.model.obj : '"Representación visual del modelo"'}` : '"Representación visual del modelo"'}
+                            Archivo .gtlf: {model ?`${model.model.obj ? model.model.obj : '"Archivo .gltf"'}` : '"Archivo .gltf"'}
                           </Typography>
                         </div>
                         <div style={{display: 'flex'}}>  
                           <TextureIcon/>
                           <Typography 
                             variant="h6"
+                            component="span"
                           >
-                            File Format: {model ? `${model.model.fileFormat ? model.model.fileFormat : '"File Format para mayor calidad del modelo"'}` : '"File Format para mayor calidad del modelo"'}
+                            Archivo .bin: {model ? `${model.model.fileFormat ? model.model.fileFormat : '"Archivo .bin"'}` : '"Archivo .bin"'}
                           </Typography>
                         </div>
                         <div style={{display: 'flex'}}>  
                           <DescriptionIcon/>
                           <Typography 
                             variant="h6"
+                            component="span"
                           >
-                            Descreción Historica: {model ? `${model.data.description  ? model.data.description : '"La Descrioción"'}`  : '"La Descripción"'}
+                            Descripción Historica: {model ? `${model.data.description  ? model.data.description : '"La Descripción"'}`  : '"La Descripción"'}
                           </Typography>
                         </div>
                         <div style={{display: 'flex'}}>  
                           <TodayIcon/>
                           <Typography 
                             variant="h6"
+                            component="span"
                           >
                             Fecha Historica: {model ? `${model.data.dateMonument ? model.data.dateMonument.split('T')[0] : '"Fecha historica del modelo"'}` : '"Fecha historica del modelo"'}
                           </Typography>
@@ -128,6 +137,7 @@ const ModalShowMore = () => {
                           <InfoIcon/>
                           <Typography 
                             variant="h6"
+                            component="span"
                           >
                             Información Extra: {model ? `${model.data.extraInfo ? model.data.extraInfo : '"Información extra relevante del modelo"'}` : '"Información extra relevante del modelo"'}
                           </Typography>
@@ -136,6 +146,7 @@ const ModalShowMore = () => {
                           <LocationOnIcon/>
                           <Typography 
                             variant="h6"
+                            component="span"
                           > 
                             Location: {model ? `${model.location ? JSON.stringify(model.location, null, 3) : '"Localización"'}` : '"Localización"'}
                           </Typography>
