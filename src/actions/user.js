@@ -11,6 +11,7 @@ export const startGetUser = (uid) => {
 
         const resp = await fetchConToken(`usuarios/${uid}`);
         const data = await resp.json();
+        console.log(data);
 
         if (data.ok) {
             dispatch(getUser(data.usuario));
