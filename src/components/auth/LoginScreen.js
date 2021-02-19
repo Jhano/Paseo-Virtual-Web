@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
   },
   image: {
-    backgroundImage: 'url(https://cdn.pixabay.com/photo/2017/04/28/20/13/smartphone-2269340_960_720.jpg)',
+    backgroundImage: 'url(../../assets/login/login.jpg)',
     backgroundRepeat: 'no-repeat',
     backgroundColor:
       theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],

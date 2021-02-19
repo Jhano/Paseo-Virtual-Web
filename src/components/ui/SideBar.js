@@ -13,6 +13,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import SideListItems from './SideListItems';
 import { closeDrawer } from '../../actions/ui';
+import { Link } from 'react-router-dom';
+import { Button } from '@material-ui/core';
 
 const drawerWidth = 240;
 
@@ -29,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    cursor: 'pointer'
   },
   drawerPaper: {
     position: 'relative',
@@ -105,9 +108,11 @@ const SideBar = () => {
         >
             
             <div className={classes.toolbarIcon}>
-                <Typography component="h1" variant="h6" color="primary" noWrap className={classes.title}>
-                            Paseos Virtuales
-                </Typography>
+                <Link to="/" style={{ textDecoration: 'none' }}>
+                  <Typography component="h1" variant="h6" color="primary" noWrap className={classes.title}>
+                              Paseos Virtuales
+                  </Typography>
+                </Link>
                 <IconButton onClick={handleDrawerClose}>
                   <ChevronLeftIcon />
                 </IconButton>
@@ -129,9 +134,11 @@ const SideBar = () => {
               }}
         >
             <div className={classes.toolbarIcon}>
+            <Link to="/" style={{ textDecoration: 'none' }}>
                 <Typography component="h1" variant="h6" color="primary" noWrap className={classes.title}>
                             Paseos Virtuales
                 </Typography>
+            </Link>
                 <IconButton onClick={handleDrawerClose}>
                   <ChevronLeftIcon />
                 </IconButton>
