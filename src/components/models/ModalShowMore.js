@@ -9,7 +9,6 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
-import Brightness4Icon from '@material-ui/icons/Brightness4';
 import TextureIcon from '@material-ui/icons/Texture';
 import DescriptionIcon from '@material-ui/icons/Description';
 import TodayIcon from '@material-ui/icons/Today';
