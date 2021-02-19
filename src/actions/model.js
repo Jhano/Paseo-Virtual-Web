@@ -105,8 +105,10 @@ export const startAddModel = (dataAdd, file = '', fileFormat = '') => {
             dispatch(startLoadingModels(0, 5));
             Swal.fire('Success', 'Modelo agregado Correctamente');
         } else {
-            Swal.fire('No se ha podido agregar un nuevo modelo', data.err, 'error');
-            console.log(data.err)
+            Swal.fire('No se ha podido agregar un nuevo modelo', data.msg, 'error');
+            dispatch(selectedFileModel(''));
+            dispatch(selectedFileModelFormat(''));
+            console.log(data.msg)
         }
     }
 }
@@ -173,7 +175,7 @@ export const startUploadFileModel = (id, file) => {
             dispatch(finishLoading());
             dispatch(selectedFileModel(''));
             dispatch(selectedFileModelFormat(''));
-            dispatch(startFindModel(id));
+            //dispatch(startFindModel(id));
         } else {
 
             Swal.fire('Error', data.err.message, 'error');
@@ -233,5 +235,11 @@ const findModel = (model) => ({
 export const clearModelFind = () => ({
     type: types.modelClearModelFindModal,
     payload: undefined
+
+})
+
+export const modelSearchCopy = (searchCopy) => ({
+    type: types.modelSearchCopy,
+    payload: searchCopy
 
 })

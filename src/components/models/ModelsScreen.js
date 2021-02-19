@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -10,7 +10,7 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import SearchIcon from '@material-ui/icons/Search';
 import ClearIcon from '@material-ui/icons/Clear';
 
-import { searchModelsOff, startLoadingModels, startSearchModels } from '../../actions/model';
+import { modelSearchCopy, searchModelsOff, startLoadingModels, startSearchModels } from '../../actions/model';
 import { changeRowsPerPage, changeDesde, changeDesdeSearch, changeRowsPerPageSearch } from '../../actions/ui';
 import { useForm } from '../../hooks/useForm';
 import ModalShowMore from './ModalShowMore';
@@ -52,10 +52,9 @@ const ModelsScreen = () => {
 
     const classes = useStyles();
     const dispatch = useDispatch();
-    const [searchCopy, setSearchCopy] = useState();
 
     const {desde, rowsPerPage, desdeSearch, rowsPerPageSearch} = useSelector(state => state.ui);
-    const {search: searchFlag} = useSelector(state => state.model);
+    const {search: searchFlag, searchCopy} = useSelector(state => state.model);
     const [formValues, handleInputChange, reset] = useForm({
         search: '',
     });
@@ -77,8 +76,9 @@ const ModelsScreen = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault(); 
-        setSearchCopy(search);
-        dispatch(startSearchModels(searchCopy, desdeSearch, rowsPerPageSearch ));
+
+        dispatch(modelSearchCopy(search));
+        dispatch(startSearchModels(search, desdeSearch, rowsPerPageSearch ));
         
         
     }
@@ -90,6 +90,7 @@ const ModelsScreen = () => {
         dispatch(changeDesdeSearch(0));
         dispatch(changeRowsPerPageSearch(5));  
         dispatch(startLoadingModels(desde, rowsPerPage));
+        dispatch(modelSearchCopy(''));
         reset({search: ''})
     }
 

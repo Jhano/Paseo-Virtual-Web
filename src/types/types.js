@@ -45,6 +45,7 @@ export const types = {
     modelShowMore: '[model] Show more',
     modelSearchOn: '[model] Search models on',
     modelSearchOff: '[model] Search models off',
+    modelSearchCopy: '[model] Search copy',
     modelStartUploadFile: '[model] Start upload file',
     modelUploadFile: '[model] Upload file',
     modelUploadFileFormat: '[model] Upload fileFormat',

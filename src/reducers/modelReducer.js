@@ -8,7 +8,8 @@ const initialState = {
     file: null,
     fileFormat: null,
     modelUpdate: {},
-    //modelfind
+    searchCopy: ''
+        //modelfind
 }
 
 export const modelReducer = (state = initialState, action) => {
@@ -16,6 +17,7 @@ export const modelReducer = (state = initialState, action) => {
     switch (action.type) {
         case types.modelLoading:
             return {
+                ...state,
                 models: action.payload.models,
                 cuantos: action.payload.cuantos
             }
@@ -74,6 +76,12 @@ export const modelReducer = (state = initialState, action) => {
                 ...state,
                 modelFind: action.payload
             }
+        case types.modelSearchCopy:
+            return {
+                ...state,
+                searchCopy: action.payload
+            }
+
 
 
         default:
