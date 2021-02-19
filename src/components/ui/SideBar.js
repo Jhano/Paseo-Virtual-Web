@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import SideListItems from './SideListItems';
 import { closeDrawer } from '../../actions/ui';
 import { Link } from 'react-router-dom';
-import { Button } from '@material-ui/core';
+
 
 const drawerWidth = 240;
 

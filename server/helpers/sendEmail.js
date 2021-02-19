@@ -21,7 +21,7 @@ const sendEmail = async(email, token, res) => {
             to: email,
             subject: 'Confirmación de registro',
             text: 'Por favor presionar en el siguiente link para confirmar registro:',
-            html: `<a href='http://localhost:4000/api/emails/${token}'>Confirmar...</a>`,
+            html: `<a href='http://60122a8d95e9.ngrok.io/api/emails/${token}'>Confirmar...</a>`,
         };
         // Enviamos el email
         const correoEnviado = await transporter.sendMail(mailOptions);

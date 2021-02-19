@@ -22,7 +22,7 @@ const InicioScreen = () => {
     return (
         <div className={classes.root}>
             <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
-                <img src="../../assets/logo/logo.png" />
+                <img alt="logoa-app" src="../../assets/logo/logo.png" />
                 <Typography style={{fontSize: '40px', marginBottom: '25px'}}> BIENVENIDO!! {name} </Typography>
             </div>   
             <Typography style={{fontSize: '25px', marginBottom: '15px'}}> Te encuentras en el sistema para administrar los modelos 3D.</Typography>
