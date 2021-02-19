@@ -112,7 +112,7 @@ const obtenerUsuario = async(req, res = response) => {
         res.json({
             ok: true,
             usuario,
-            img: usuario.img
+            img: usuario.img || ''
         })
 
     } catch (err) {
