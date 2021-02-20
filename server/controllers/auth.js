@@ -29,6 +29,14 @@ const loginUsuario = async(req, res = response) => {
             })
         }
 
+        if (!usuario.state) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'El usuario no esta validado'
+            })
+        }
+
+
         const token = await generarJWT(usuario.id, usuario.name, usuario.role);
 
         res.json({
